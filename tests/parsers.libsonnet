@@ -9,10 +9,10 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error` | json'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | json'
   ],
   [
     "it supports logfmt parser",
@@ -22,35 +22,35 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error` | logfmt'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt'
   ],
   [
-    "it supports logfmt parser",
+    "it supports pattern parser",
     logql.new()
       .withLabels({
         cluster: 'prod',
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .pattern('<_><status_code><_>')
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error` | pattern `<_><status_code><_>`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | pattern `<_><status_code><_>`'
   ],
   [
-    "it supports logfmt parser",
+    "it supports regex parser",
     logql.new()
       .withLabels({
         cluster: 'prod',
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .regex('.+"status":(?P<status_code>[^,]+')
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error` | pattern `<_><status_code><_>`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | regex `.+"status":(?P<status_code>[^,]+`'
   ],
 ]

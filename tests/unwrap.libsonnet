@@ -9,7 +9,7 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .unwrap('response_size')
       .build(formatted=false),
@@ -23,7 +23,7 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .unwrapDuration('response_time')
       .build(formatted=false),
@@ -37,7 +37,7 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .unwrapBytes('response_size')
       .build(formatted=false),

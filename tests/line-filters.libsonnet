@@ -2,7 +2,7 @@ local logql = import "../logql.libsonnet";
 
 [
   [
-    "it supports line eq filter",
+    "it supports lineEq filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -14,7 +14,19 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error`'
   ],
   [
-    "it supports line neq filter",
+    "it supports line eq filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .line().eq('error')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error`'
+  ],
+  [
+    "it supports lineNeq filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -26,7 +38,19 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} != `error`'
   ],
   [
-    "it supports line regex matches filter",
+    "it supports line neq filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .line().neq('error')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} != `error`'
+  ],
+  [
+    "it supports lineRe (regex) matches filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -38,7 +62,19 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} |~ `error`'
   ],
   [
-    "it supports line regex not matches filter",
+    "it supports line re (regex) matches filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .line().re('error')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |~ `error`'
+  ],
+  [
+    "it supports lineNre (regex not) matches filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -46,6 +82,18 @@ local logql = import "../logql.libsonnet";
         app: 'ecommerce'
       })
       .lineNre('error')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error`'
+  ],
+  [
+    "it supports line nre (regex not) matches filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .line().nre('error')
       .build(formatted=false),
     '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error`'
   ],

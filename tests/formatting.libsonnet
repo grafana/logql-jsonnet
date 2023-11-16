@@ -9,7 +9,7 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .line_format('{{.query}} {{.duration}}')
       .build(formatted=false),
@@ -23,7 +23,7 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .label_format('response_size', '{{ .response_size | lower }}')
       .build(formatted=false),
@@ -37,14 +37,14 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .drop([
-        logql.new().label('level').build(formatted=false),
-        logql.new().labelEq('request_method', 'GET').build(formatted=false),
+        logql.new().label('level').noop().build(formatted=false),
+        logql.new().label('request_method').eq('GET').build(formatted=false),
       ])
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | drop level, request_method=`GET`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | drop level, request_method==`GET`'
   ],
   [
     "it supports dropping labels with raw expression",
@@ -54,14 +54,14 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .drop([
         'level',
-        'request_method=`GET`',
+        'request_method==`GET`',
       ])
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | drop level, request_method=`GET`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | drop level, request_method==`GET`'
   ],
   [
     "it supports keeping labels with dsl",
@@ -71,14 +71,14 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .keep([
-        logql.new().label('level').build(formatted=false),
-        logql.new().labelEq('request_method', 'GET').build(formatted=false),
+        logql.new().label('level').noop().build(formatted=false),
+        logql.new().label('request_method').eq('GET').build(formatted=false),
       ])
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | keep level, request_method=`GET`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | keep level, request_method==`GET`'
   ],
   [
     "it supports keeping labels with raw expression",
@@ -88,13 +88,13 @@ local logql = import "../logql.libsonnet";
         region: 'us-east-1',
         app: 'ecommerce'
       })
-      .lineEq('error')
+      .line().eq('error')
       .logfmt()
       .keep([
         'level',
-        'request_method=`GET`',
+        'request_method==`GET`',
       ])
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | keep level, request_method=`GET`'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | logfmt | keep level, request_method==`GET`'
   ],
 ]
