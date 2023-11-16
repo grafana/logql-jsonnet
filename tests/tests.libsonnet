@@ -9,7 +9,7 @@ local lineFilters = import 'line-filters.libsonnet';
 local operators = import 'operators.libsonnet';
 local parsers = import 'parsers.libsonnet';
 local rangeAgg = import 'range-aggregations.libsonnet';
-local selectors = import 'range-aggregations.libsonnet';
+local selectors = import 'selectors.libsonnet';
 local unwrap = import 'unwrap.libsonnet';
 local unwrappedRangeFunctions = import 'unwrapped-range-functions.libsonnet';
 

@@ -2,7 +2,7 @@ local logql = import "../logql.libsonnet";
 
 [
   [
-    "it supports label eq filter",
+    "it supports labelEq filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -15,7 +15,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code == 200'
   ],
   [
-    "it supports label neq filter",
+    "it supports label eq filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').eq(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code == 200'
+  ],
+  [
+    "it supports labelNeq filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -28,7 +41,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code != 200'
   ],
   [
-    "it supports label gt filter",
+    "it supports label neq filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').neq(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code != 200'
+  ],
+  [
+    "it supports labelGt filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -41,7 +67,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code > 200'
   ],
   [
-    "it supports label gte filter",
+    "it supports label gt filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').gt(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code > 200'
+  ],
+  [
+    "it supports labelGte filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -54,7 +93,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code >= 200'
   ],
   [
-    "it supports label lt filter",
+    "it supports label gte filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').gte(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code >= 200'
+  ],
+  [
+    "it supports labelLt filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -67,7 +119,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code < 200'
   ],
   [
-    "it supports label lte filter",
+    "it supports label lt filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').lt(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code < 200'
+  ],
+  [
+    "it supports labelLte filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -80,7 +145,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code <= 200'
   ],
   [
-    "it supports label regex matches filter",
+    "it supports label lte filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').lte(200)
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code <= 200'
+  ],
+  [
+    "it supports labelRe (regex) matches filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -93,7 +171,20 @@ local logql = import "../logql.libsonnet";
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code =~ `2..`'
   ],
   [
-    "it supports label regex matches filter",
+    "it supports label re (regex) matches filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').re('2..')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code =~ `2..`'
+  ],
+  [
+    "it supports labelNre (not regex) matches filter",
     logql.new()
       .withLabels({
         cluster: 'prod',
@@ -102,6 +193,19 @@ local logql = import "../logql.libsonnet";
       })
       .json()
       .labelNre('status_code', '2..')
+      .build(formatted=false),
+    '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code !~ `2..`'
+  ],
+  [
+    "it supports label nre (not regex) matches filter",
+    logql.new()
+      .withLabels({
+        cluster: 'prod',
+        region: 'us-east-1',
+        app: 'ecommerce'
+      })
+      .json()
+      .label('status_code').nre('2..')
       .build(formatted=false),
     '{app="ecommerce", cluster="prod", region="us-east-1"} | json | status_code !~ `2..`'
   ],

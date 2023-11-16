@@ -51,7 +51,7 @@ local logql = import "../logql.libsonnet";
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} !~ `error` | json'
+    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | json'
   ],
   [
     "it supports selector (neq) dsl",
@@ -62,7 +62,7 @@ local logql = import "../logql.libsonnet";
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app!="ecommerce", cluster!="prod", region!="us-east-1"} !~ `error` | json'
+    '{app!="ecommerce", cluster!="prod", region!="us-east-1"} |= `error` | json'
   ],
   [
     "it supports selector (re) dsl",
@@ -73,7 +73,7 @@ local logql = import "../logql.libsonnet";
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app=~"ecommerce|payment", cluster=~"prod|test", region=~"us-east-\\d+"} !~ `error` | json'
+    '{app=~"ecommerce|payment", cluster=~"prod|test", region=~"us-east-\\d+"} |= `error` | json'
   ],
   [
     "it supports selector (nre) dsl",
@@ -84,7 +84,7 @@ local logql = import "../logql.libsonnet";
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app!~"ecommerce?", cluster!~"prod|test", region!~"us-east-\\d+"} !~ `error` | json'
+    '{app!~"ecommerce?", cluster!~"prod|test", region!~"us-east-\\d+"} |= `error` | json'
   ],
   [
     "it supports selector (mixed) dsl",
@@ -96,6 +96,6 @@ local logql = import "../logql.libsonnet";
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app="ecommerce", cluster!="prod", env=~"dev|test", region!~"us-east-\\d+"} !~ `error` | json'
+    '{app="ecommerce", cluster!="prod", env=~"dev|test", region!~"us-east-\\d+"} |= `error` | json'
   ],
 ]
