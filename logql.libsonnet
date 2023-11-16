@@ -239,7 +239,7 @@ local range(interval, resolution) = (
 
     // unwrapped range and aggregations
     _range_agg(func, interval, resolution=null, offset=''):: self {
-      local paddedOffset = if offset != null && offset != '' then ' %s' % offset else '',
+      local paddedOffset = if offset != null && offset != '' then ' offset %s' % offset else '',
       _statements+:: [{ type: 'overTime', args: [func, interval, resolution, offset] }],
       // functions are not built until the build() method is called, so we need to add the function to the _funcs array
       // the leading %s is not immediately replaced and is a placeholder where the rendered inner query will utlimately
