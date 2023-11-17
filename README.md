@@ -33,10 +33,10 @@ To support a more fluent api, a single method of `label()` is provided that retu
 
 | Function / Operation | Sample Usage | Description |
 | :---------------- | :----------- | :----------- |
-| `.eq(value)` | `label('region').eq('us-east-1')` | Generates a single label equality label selector |
-| `.neq(value)` | `label('region').neq('us-east-1')` | Generates a single label not equal label selector |
-| `.re(value)` | `label('region').re('us-east-1')` | Generates a single label regex matches label selector |
-| `.nre(value)` | `label('region').nre('us-east-1')` | Generates a single label not regex matches label selector |
+| `.eq(value)` | `.label('region').eq('us-east-1')` | Generates a single label equality label selector |
+| `.neq(value)` | `.label('region').neq('us-east-1')` | Generates a single label not equal label selector |
+| `.re(value)` | `.label('region').re('us-east-1')` | Generates a single label regex matches label selector |
+| `.nre(value)` | `.label('region').nre('us-east-1')` | Generates a single label not regex matches label selector |
 
 #### Example Stream Selector Fluent Usage
 
@@ -246,8 +246,8 @@ logql.new()
 | :---------------- | :----------- | :----------- |
 | `.line_format(format)`  | `.line_format('{{ .request_method }}: {{ .status_code }}')` | Rewrites the log line content by using the [text/template](https://golang.org/pkg/text/template/) format |
 | `.lineFormat(format)` | `.lineFormat('{{ .request_method }}: {{ .status_code }}')` | Wrapper for `.line_format()` |
-| `.label_format(label, path)` | `.label_format('response_size', '{{ .response_size | lower }}')` | Rename, modifies or adds labels |
-| `.labelFormat(label, path)` | `.labelFormat('response_size', '{{ .response_size | lower }}')` | Wrapper for `.label_format()` |
+| `.label_format(label, path)` | `.label_format('response_size', '{{ .response_size \| lower }}')` | Rename, modifies or adds labels |
+| `.labelFormat(label, path)` | `.labelFormat('response_size', '{{ .response_size \| lower }}')` | Wrapper for `.label_format()` |
 | `.decolorize()`  | `.decolorize()` | Strips ANSI sequences (color codes) from the line |
 | `.drop(labels[])` | `.drop(['instance_id','host'])` | Drops one or more labels or labels with a conditional check |
 | `.keep(labels[])`  | `.keep(['status_code', 'method', 'response_size', 'path'])` | Keeps one or more labels or labels with a conditional check, dropping all other labels |
