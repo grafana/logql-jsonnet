@@ -322,4 +322,3 @@ count_over_time(
 | `.unwrap(label)`  | `.unwrap('response_bytes')` | Sets the label to unwrap for the aggregation. Unwrapped ranges uses extracted labels as sample values instead of log lines.  |
 | `.unwrapDuration(label)` | `.unwrapDuration('response_time')` | Unwraps the label and converts the value from a [go duration format](https://golang.org/pkg/time/#ParseDuration) to seconds |
 | `.unwrapBytes(label)`  | `.unwrapBytes('response_size')` | Unwraps the label and converts the value from a bytes unit to bytes |
-| `.bytes_over_time(interval, resolution?)` | `.bytes_over_time('5m')` | Counts the amount of bytes used by each log stream for a given range |
