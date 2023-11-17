@@ -5,12 +5,12 @@ local logql = import "../logql.libsonnet";
     "it supports withLabels as object",
     logql.new()
       .withLabels({
-        cluster: 'prod',
+        app: 'ecommerce',
+        cluster: "primary",
         region: 'us-east-1',
-        app: 'ecommerce'
       })
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"}'
+    '{app="ecommerce", cluster="primary", region="us-east-1"}'
   ],
   [
     "it supports withLabel with object",
@@ -23,7 +23,7 @@ local logql = import "../logql.libsonnet";
       .withLabel({
         label: 'cluster',
         op: '=',
-        value: 'prod'
+        value: 'primary'
       })
       .withLabel({
         label: 'region',
@@ -31,38 +31,38 @@ local logql = import "../logql.libsonnet";
         value: 'us-east-1'
       })
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"}'
+    '{app="ecommerce", cluster="primary", region="us-east-1"}'
   ],
   [
     "it supports withLabel with arguments",
     logql.new()
       .withLabel('app', '=', 'ecommerce')
-      .withLabel('cluster', '=', 'prod')
+      .withLabel('cluster', '=', 'primary')
       .withLabel('region', '=', 'us-east-1')
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"}'
+    '{app="ecommerce", cluster="primary", region="us-east-1"}'
   ],
   [
     "it supports selector (eq) dsl",
     logql.new()
       .selector('app').eq('ecommerce')
-      .selector('cluster').eq('prod')
+      .selector('cluster').eq('primary')
       .selector('region').eq('us-east-1')
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app="ecommerce", cluster="prod", region="us-east-1"} |= `error` | json'
+    '{app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | json'
   ],
   [
     "it supports selector (neq) dsl",
     logql.new()
       .selector('app').neq('ecommerce')
-      .selector('cluster').neq('prod')
+      .selector('cluster').neq('primary')
       .selector('region').neq('us-east-1')
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app!="ecommerce", cluster!="prod", region!="us-east-1"} |= `error` | json'
+    '{app!="ecommerce", cluster!="primary", region!="us-east-1"} |= `error` | json'
   ],
   [
     "it supports selector (re) dsl",
@@ -79,23 +79,23 @@ local logql = import "../logql.libsonnet";
     "it supports selector (nre) dsl",
     logql.new()
       .selector('app').nre('ecommerce?')
-      .selector('cluster').nre('prod|test')
+      .selector('cluster').nre('eu-\\d+')
       .selector('region').nre('us-east-\\d+')
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app!~"ecommerce?", cluster!~"prod|test", region!~"us-east-\\d+"} |= `error` | json'
+    '{app!~"ecommerce?", cluster!~"eu-\\d+", region!~"us-east-\\d+"} |= `error` | json'
   ],
   [
     "it supports selector (mixed) dsl",
     logql.new()
       .selector('app').eq('ecommerce')
-      .selector('cluster').neq('prod')
+      .selector('cluster').neq('primary')
       .selector('env').re('dev|test')
       .selector('region').nre('us-east-\\d+')
       .line().eq('error')
       .json()
       .build(formatted=false),
-    '{app="ecommerce", cluster!="prod", env=~"dev|test", region!~"us-east-\\d+"} |= `error` | json'
+    '{app="ecommerce", cluster!="primary", env=~"dev|test", region!~"us-east-\\d+"} |= `error` | json'
   ],
 ]
