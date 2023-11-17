@@ -107,7 +107,7 @@ local range(interval, resolution) = (
     // line filters
     _lineFilter(operator, text):: self {
       _statements+:: [{ type: 'lineFilter', args: [operator, text] }],
-      _query+:: ' ' + std.format('%s `%s`', [operator, text]),
+      _query+:: '\n' + std.format('%s `%s`', [operator, text]),
     },
 
     lineEq(text):: self._lineFilter('|=', text),
@@ -139,16 +139,16 @@ local range(interval, resolution) = (
     regex(regex):: self._parser(std.format('regex `%s`', regex)),
 
     // label filters
-    _labelFilter(operator, label, predicate):: self {
+    _labelFilter(operator, label, value):: self {
       // check the predicate type and convert it to a string with quotes if it's a string
-      local formatted = if std.isString(predicate) then
-        if isDuration(predicate) || isBytes(predicate) then
-          predicate
+      local formatted = if std.isString(value) then
+        if isDuration(value) || isBytes(value) then
+          value
         else
-          std.format('`%s`', predicate)
+          std.format('`%s`', value)
       else
-        std.toString(predicate),
-      _statements+:: [{ type: 'labelFilter', args: [operator, label, predicate] }],
+        std.toString(value),
+      _statements+:: [{ type: 'labelFilter', args: [operator, label, value] }],
       _query+:: pipe +
         if operator == '' then
           std.format('%s', [label])
@@ -156,25 +156,25 @@ local range(interval, resolution) = (
           std.format('%s %s %s', [label, operator, formatted]),
     },
     labelNoop(label):: self._labelFilter('', label, ''),
-    labelEq(label, predicate):: self._labelFilter('==', label, predicate),
-    labelNeq(label, predicate):: self._labelFilter('!=', label, predicate),
-    labelGt(label, predicate):: self._labelFilter('>', label, predicate),
-    labelGte(label, predicate):: self._labelFilter('>=', label, predicate),
-    labelLt(label, predicate):: self._labelFilter('<', label, predicate),
-    labelLte(label, predicate):: self._labelFilter('<=', label, predicate),
-    labelRe(label, predicate):: self._labelFilter('=~', label, predicate),
-    labelNre(label, predicate):: self._labelFilter('!~', label, predicate),
+    labelEq(label, value):: self._labelFilter('==', label, value),
+    labelNeq(label, value):: self._labelFilter('!=', label, value),
+    labelGt(label, value):: self._labelFilter('>', label, value),
+    labelGte(label, value):: self._labelFilter('>=', label, value),
+    labelLt(label, value):: self._labelFilter('<', label, value),
+    labelLte(label, value):: self._labelFilter('<=', label, value),
+    labelRe(label, value):: self._labelFilter('=~', label, value),
+    labelNre(label, value):: self._labelFilter('!~', label, value),
 
     label(label=''):: {
       noop():: it.labelNoop(label),
-      eq(predicate):: it.labelEq(label, predicate),
-      neq(predicate):: it.labelNeq(label, predicate),
-      gt(predicate):: it.labelGt(label, predicate),
-      gte(predicate):: it.labelGte(label, predicate),
-      lt(predicate):: it.labelLt(label, predicate),
-      lte(predicate):: it.labelLte(label, predicate),
-      re(predicate):: it.labelRe(label, predicate),
-      nre(predicate):: it.labelNre(label, predicate),
+      eq(value):: it.labelEq(label, value),
+      neq(value):: it.labelNeq(label, value),
+      gt(value):: it.labelGt(label, value),
+      gte(value):: it.labelGte(label, value),
+      lt(value):: it.labelLt(label, value),
+      lte(value):: it.labelLte(label, value),
+      re(value):: it.labelRe(label, value),
+      nre(value):: it.labelNre(label, value),
     },
 
     // operators
@@ -212,13 +212,19 @@ local range(interval, resolution) = (
       _statements+:: [{ type: 'lineFormat', args: [format] }],
       _query+:: pipe + std.format('line_format `%s`', [format]),
     },
+    lineFormat(format):: self.line_format(format),
     label_format(label, path):: self {
       _statements+:: [{ type: 'labelFormat', args: [label, path] }],
       _query+:: pipe + std.format('label_format %s=`%s`', [label, path]),
     },
+    labelFormat(label, path):: self.label_format(label, path),
+    decolorize():: self {
+      _statements+:: [{ type: 'decolorize', args: [] }],
+      _query+:: pipe + 'decolorize',
+    },
 
     _dropKeep(type, labels):: self {
-      local formattedLabels = std.strReplace(std.strReplace(std.strReplace(std.strReplace(std.strReplace(std.join(', ', labels), stripNewLines(pipe), ''), ' == ', '=='), ' != ', '!='), ' =~ ', '=~'), ' !~ ', '!~'),
+      local formattedLabels = std.strReplace(std.strReplace(std.strReplace(std.strReplace(std.strReplace(std.strReplace(std.join(', ', labels), stripNewLines(pipe), ''), ' == ', '=='), ' != ', '!='), ' =~ ', '=~'), ' !~ ', '!~'), '\n| ', ''),
       _statements+:: [{ type: type, args: [labels] }],
       _query+:: pipe + std.format('%s %s', [type, formattedLabels]),
     },
@@ -238,39 +244,58 @@ local range(interval, resolution) = (
     applyFunctions(query):: std.foldl(self.applyTemplate, self._funcs, query),
 
     // unwrapped range and aggregations
-    _range_agg(func, interval, resolution=null, offset=''):: self {
+    _range_agg(func, interval, resolution=null, offset=null):: self {
       local paddedOffset = if offset != null && offset != '' then ' offset %s' % offset else '',
       _statements+:: [{ type: 'overTime', args: [func, interval, resolution, offset] }],
       // functions are not built until the build() method is called, so we need to add the function to the _funcs array
       // the leading %s is not immediately replaced and is a placeholder where the rendered inner query will utlimately
       // be rendered at build time
-      _funcs+:: if std.startsWith(func, 'quantile_over_time') then
+      _funcs+::
+        if std.startsWith(func, 'quantile_over_time') then
           // the quantile_over_time is the only _over_time that has 2 arguments and is passed in with the leading ( already
           [func + '%s ' + range(interval, resolution) + '%s)' % paddedOffset]
         else
           [func + '(%s ' + range(interval, resolution) + '%s)' % paddedOffset],
     },
-    rate(interval, resolution=null):: self._range_agg('rate', interval, resolution),
-    count_over_time(interval, resolution=null):: self._range_agg('count_over_time', interval, resolution),
-    bytes_rate(interval, resolution=null):: self._range_agg('bytes_rate', interval, resolution),
-    bytes_over_time(interval, resolution=null):: self._range_agg('bytes_over_time', interval, resolution),
-    rate_counter(interval, resolution=null):: self._range_agg('rate_counter', interval, resolution),
-    sum_over_time(interval, resolution=null):: self._range_agg('sum_over_time', interval, resolution),
-    avg_over_time(interval, resolution=null):: self._range_agg('avg_over_time', interval, resolution),
-    min_over_time(interval, resolution=null):: self._range_agg('min_over_time', interval, resolution),
-    max_over_time(interval, resolution=null):: self._range_agg('max_over_time', interval, resolution),
-    first_over_time(interval, resolution=null):: self._range_agg('first_over_time', interval, resolution),
-    last_over_time(interval, resolution=null):: self._range_agg('last_over_time', interval, resolution),
-    stdvar_over_time(interval, resolution=null):: self._range_agg('stdvar_over_time', interval, resolution),
-    stddev_over_time(interval, resolution=null):: self._range_agg('stddev_over_time', interval, resolution),
-    quantile_over_time(quantile, interval, resolution=null):: self._range_agg(std.format('quantile_over_time(%s, ', quantile), interval, resolution),
-    absent_over_time(interval, resolution=null):: self._range_agg('absent_over_time', interval, resolution),
+    // TODO: add support for offset
+    // TODO: add support for grouping
+    rate(interval, resolution=null, offset=null):: it._range_agg('rate', interval, resolution, offset),
+    rate_counter(interval, resolution=null, offset=null):: it._range_agg('rate_counter', interval, resolution, offset),
+    rateCounter(interval, resolution=null, offset=null):: it.rate_counter(interval, resolution, offset),
+    bytes_rate(interval, resolution=null, offset=null):: it._range_agg('bytes_rate', interval, resolution, offset),
+    bytesRate(interval, resolution=null, offset=null):: it.bytes_rate(interval, resolution, offset),
+    bytes_over_time(interval, resolution=null, offset=null):: it._range_agg('bytes_over_time', interval, resolution, offset),
+    bytesOverTime(interval, resolution=null, offset=null):: it.bytes_over_time(interval, resolution, offset),
+    count_over_time(interval, resolution=null, offset=null):: it._range_agg('count_over_time', interval, resolution, offset),
+    countOverTime(interval, resolution=null, offset=null):: it.count_over_time(interval, resolution, offset),
+    sum_over_time(interval, resolution=null, offset=null):: it._range_agg('sum_over_time', interval, resolution, offset),
+    sumOverTime(interval, resolution=null, offset=null):: it.sum_over_time(interval, resolution, offset),
+    absent_over_time(interval, resolution=null, offset=null):: it._range_agg('absent_over_time', interval, resolution, offset),
+    absentOverTime(interval, resolution=null, offset=null):: it.absent_over_time(interval, resolution, offset),
+    // the following unwrapped range aggregations support optional aggreation using by/without
+    avg_over_time(interval, resolution=null, offset=null):: it._range_agg('avg_over_time', interval, resolution, offset),
+    avgOverTime(interval, resolution=null, offset=null):: it.avg_over_time(interval, resolution, offset),
+    min_over_time(interval, resolution=null, offset=null):: it._range_agg('min_over_time', interval, resolution, offset),
+    minOverTime(interval, resolution=null, offset=null):: it.min_over_time(interval, resolution, offset),
+    max_over_time(interval, resolution=null, offset=null):: it._range_agg('max_over_time', interval, resolution, offset),
+    maxOverTime(interval, resolution=null, offset=null):: it.max_over_time(interval, resolution, offset),
+    first_over_time(interval, resolution=null, offset=null):: it._range_agg('first_over_time', interval, resolution, offset),
+    firstOverTime(interval, resolution=null, offset=null):: it.first_over_time(interval, resolution, offset),
+    last_over_time(interval, resolution=null, offset=null):: it._range_agg('last_over_time', interval, resolution, offset),
+    lastOverTime(interval, resolution=null, offset=null):: it.last_over_time(interval, resolution, offset),
+    stdvar_over_time(interval, resolution=null, offset=null):: it._range_agg('stdvar_over_time', interval, resolution, offset),
+    stdVarOverTime(interval, resolution=null, offset=null):: it.stdvar_over_time(interval, resolution, offset),
+    stddev_over_time(interval, resolution=null, offset=null):: it._range_agg('stddev_over_time', interval, resolution, offset),
+    stdDevOverTime(interval, resolution=null, offset=null):: it.stddev_over_time(interval, resolution, offset),
+    quantile_over_time(quantile, interval, resolution=null, offset=null):: it._range_agg(std.format('quantile_over_time(%s, ', quantile), interval, resolution, offset),
+    quantileOverTime(quantile, interval, resolution=null, offset=null):: it.quantile_over_time(quantile, interval, resolution, offset),
 
     // aggregation functions
+    // TODO: Support string or array
     _agg(func, by='', without=''):: self {
       local aggBy = if by != '' then std.format(' by (%s) ', [by]) else '',
       local aggWithout = if without != '' then std.format(' without (%s) ', [without]) else '',
-      _statements+:: [{ type: 'overTime', args: [func, by, without] }],
+      _statements+:: [{ type: 'agg', args: [func, by, without] }],
       _funcs+:: [func + aggBy + aggWithout + '(%s)']
     },
     sum(by='', without=''):: self._agg('sum', by, without),
