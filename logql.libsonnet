@@ -60,6 +60,18 @@ local range(interval, resolution) = (
     std.format('[%s:%s]', [i, r])
 );
 
+local stringToList(input, delimiter=',', stripSpaces=true) = (
+  if input == null then
+    []
+  else if std.isString(input) then
+    if stripSpaces then
+      std.split(std.strReplace(input, ' ', ''), delimiter)
+    else
+      std.split(input, delimiter)
+  else
+    input
+);
+
 {
   local root = self,
   new():: {
@@ -236,29 +248,34 @@ local range(interval, resolution) = (
       _statements+:: [{ type: 'unwrap', args: [label] }],
       _query+:: pipe + 'unwrap %s' % label,
     },
-    unwrapDuration(label):: self.unwrap('duration_seconds(%s)' % label),
-    unwrapBytes(label):: self.unwrap('bytes(%s)' % label),
+    unwrap_duration(label):: it.unwrap('duration_seconds(%s)' % label),
+    unwrapDuration(label):: it.unwrap_duration(label),
+    unwrap_bytes(label):: it.unwrap('bytes(%s)' % label),
+    unwrapBytes(label):: it.unwrap_bytes(label),
 
     // metric query helpers
     applyTemplate(query, func):: std.format(func, query),
     applyFunctions(query):: std.foldl(self.applyTemplate, self._funcs, query),
 
     // unwrapped range and aggregations
-    _range_agg(func, interval, resolution=null, offset=null):: self {
+    _range_agg(func, interval, resolution=null, offset=null, by=null, without=null):: self {
       local paddedOffset = if offset != null && offset != '' then ' offset %s' % offset else '',
+      local byList = stringToList(by),
+      local aggBy = if std.length(byList) > 0 then std.format(' by (%s) ', [std.join(', ', byList)]) else '',
+      local withoutList = stringToList(without),
+      local aggWithout = if std.length(withoutList) > 0 then std.format(' without (%s) ', [std.join(', ', withoutList)]) else '',
       _statements+:: [{ type: 'overTime', args: [func, interval, resolution, offset] }],
       // functions are not built until the build() method is called, so we need to add the function to the _funcs array
       // the leading %s is not immediately replaced and is a placeholder where the rendered inner query will utlimately
       // be rendered at build time
       _funcs+::
+        // the first %s is a placeholder for where the query will be inserted at
         if std.startsWith(func, 'quantile_over_time') then
           // the quantile_over_time is the only _over_time that has 2 arguments and is passed in with the leading ( already
-          [func + '%s ' + range(interval, resolution) + '%s)' % paddedOffset]
+          [func + '%s ' + range(interval, resolution) + ('%s)' % paddedOffset) + aggBy + aggWithout]
         else
-          [func + '(%s ' + range(interval, resolution) + '%s)' % paddedOffset],
+          [func + '(%s ' + range(interval, resolution) + ('%s)' % paddedOffset) + aggBy + aggWithout],
     },
-    // TODO: add support for offset
-    // TODO: add support for grouping
     rate(interval, resolution=null, offset=null):: it._range_agg('rate', interval, resolution, offset),
     rate_counter(interval, resolution=null, offset=null):: it._range_agg('rate_counter', interval, resolution, offset),
     rateCounter(interval, resolution=null, offset=null):: it.rate_counter(interval, resolution, offset),
@@ -273,52 +290,85 @@ local range(interval, resolution) = (
     absent_over_time(interval, resolution=null, offset=null):: it._range_agg('absent_over_time', interval, resolution, offset),
     absentOverTime(interval, resolution=null, offset=null):: it.absent_over_time(interval, resolution, offset),
     // the following unwrapped range aggregations support optional aggreation using by/without
-    avg_over_time(interval, resolution=null, offset=null):: it._range_agg('avg_over_time', interval, resolution, offset),
-    avgOverTime(interval, resolution=null, offset=null):: it.avg_over_time(interval, resolution, offset),
-    min_over_time(interval, resolution=null, offset=null):: it._range_agg('min_over_time', interval, resolution, offset),
-    minOverTime(interval, resolution=null, offset=null):: it.min_over_time(interval, resolution, offset),
-    max_over_time(interval, resolution=null, offset=null):: it._range_agg('max_over_time', interval, resolution, offset),
-    maxOverTime(interval, resolution=null, offset=null):: it.max_over_time(interval, resolution, offset),
-    first_over_time(interval, resolution=null, offset=null):: it._range_agg('first_over_time', interval, resolution, offset),
-    firstOverTime(interval, resolution=null, offset=null):: it.first_over_time(interval, resolution, offset),
-    last_over_time(interval, resolution=null, offset=null):: it._range_agg('last_over_time', interval, resolution, offset),
-    lastOverTime(interval, resolution=null, offset=null):: it.last_over_time(interval, resolution, offset),
-    stdvar_over_time(interval, resolution=null, offset=null):: it._range_agg('stdvar_over_time', interval, resolution, offset),
-    stdVarOverTime(interval, resolution=null, offset=null):: it.stdvar_over_time(interval, resolution, offset),
-    stddev_over_time(interval, resolution=null, offset=null):: it._range_agg('stddev_over_time', interval, resolution, offset),
-    stdDevOverTime(interval, resolution=null, offset=null):: it.stddev_over_time(interval, resolution, offset),
-    quantile_over_time(quantile, interval, resolution=null, offset=null):: it._range_agg(std.format('quantile_over_time(%s, ', quantile), interval, resolution, offset),
-    quantileOverTime(quantile, interval, resolution=null, offset=null):: it.quantile_over_time(quantile, interval, resolution, offset),
+    avg_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='avg_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    avg_over_time_by(interval, by, resolution=null, offset=null):: it.avg_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    avg_over_time_without(interval, without, resolution=null, offset=null):: it.avg_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    avgOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.avg_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    avgOverTimeBy(interval, by, resolution=null, offset=null):: it.avg_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    avgOverTimeWithout(interval, without, resolution=null, offset=null):: it.avg_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    min_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='min_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    min_over_time_by(interval, by, resolution=null, offset=null):: it.min_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    min_over_time_without(interval, without, resolution=null, offset=null):: it.min_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    minOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.min_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    minOverTimeBy(interval, by, resolution=null, offset=null):: it.min_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    minOverTimeWithout(interval, without, resolution=null, offset=null):: it.min_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    max_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='max_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    max_over_time_by(interval, by, resolution=null, offset=null):: it.max_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    max_over_time_without(interval, without, resolution=null, offset=null):: it.max_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    maxOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.max_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    maxOverTimeBy(interval, by, resolution=null, offset=null):: it.max_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    maxOverTimeWithout(interval, without, resolution=null, offset=null):: it.max_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    first_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='first_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    first_over_time_by(interval, by, resolution=null, offset=null):: it.first_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    first_over_time_without(interval, without, resolution=null, offset=null):: it.first_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    firstOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.first_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    firstOverTimeBy(interval, by, resolution=null, offset=null):: it.first_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    firstOverTimeWithout(interval, without, resolution=null, offset=null):: it.first_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    last_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='last_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    last_over_time_by(interval, by, resolution=null, offset=null):: it.last_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    last_over_time_without(interval, without, resolution=null, offset=null):: it.last_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    lastOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.last_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    lastOverTimeBy(interval, by, resolution=null, offset=null):: it.last_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    lastOverTimeWithout(interval, without, resolution=null, offset=null):: it.last_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    stdvar_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='stdvar_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    stdvar_over_time_by(interval, by, resolution=null, offset=null):: it.stdvar_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    stdvar_over_time_without(interval, without, resolution=null, offset=null):: it.stdvar_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    stdVarOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.stdvar_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    stdVarOverTimeBy(interval, by, resolution=null, offset=null):: it.stdvar_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    stdVarOverTimeWithout(interval, without, resolution=null, offset=null):: it.stdvar_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    stddev_over_time(interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func='stddev_over_time', interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    stddev_over_time_by(interval, by, resolution=null, offset=null):: it.stddev_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    stddev_over_time_without(interval, without, resolution=null, offset=null):: it.stddev_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    stdDevOverTime(interval, resolution=null, offset=null, by=[], without=[]):: it.stddev_over_time(interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    stdDevOverTimeBy(interval, by, resolution=null, offset=null):: it.stddev_over_time(interval=interval, resolution=resolution, offset=offset, by=by),
+    stdDevOverTimeWithout(interval, without, resolution=null, offset=null):: it.stddev_over_time(interval=interval, resolution=resolution, offset=offset, without=without),
+    quantile_over_time(quantile, interval, resolution=null, offset=null, by=[], without=[]):: it._range_agg(func=std.format('quantile_over_time(%s, ', quantile), interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    quantile_over_time_by(quantile, interval, by, resolution=null, offset=null):: it.quantile_over_time(quantile, interval=interval, resolution=resolution, offset=offset, by=by),
+    quantile_over_time_without(quantile, interval, without, resolution=null, offset=null):: it.quantile_over_time(quantile, interval=interval, resolution=resolution, offset=offset, without=without),
+    quantileOverTime(quantile, interval, resolution=null, offset=null, by=[], without=[]):: it.quantile_over_time(quantile, interval=interval, resolution=resolution, offset=offset, by=by, without=without),
+    quantileOverTimeBy(quantile, interval, by, resolution=null, offset=null):: it.quantile_over_time(quantile, interval=interval, resolution=resolution, offset=offset, by=by),
+    quantileOverTimeWithout(quantile, interval, without, resolution=null, offset=null):: it.quantile_over_time(quantile, interval=interval, resolution=resolution, offset=offset, without=without),
 
     // aggregation functions
-    // TODO: Support string or array
-    _agg(func, by='', without=''):: self {
-      local aggBy = if by != '' then std.format(' by (%s) ', [by]) else '',
-      local aggWithout = if without != '' then std.format(' without (%s) ', [without]) else '',
+    _agg(func, by=[], without=[]):: self {
+      local byList = stringToList(by),
+      local aggBy = if std.length(byList) > 0 then std.format(' by (%s) ', [std.join(', ', byList)]) else '',
+      local withoutList = stringToList(without),
+      local aggWithout = if std.length(withoutList) > 0 then std.format(' without (%s) ', [std.join(', ', withoutList)]) else '',
       _statements+:: [{ type: 'agg', args: [func, by, without] }],
       _funcs+:: [func + aggBy + aggWithout + '(%s)']
     },
-    sum(by='', without=''):: self._agg('sum', by, without),
-    sumBy(by):: self.sum(by, ''),
-    sumWithout(without):: self.sum('', without),
-    avg(by='', without=''):: self._agg('avg', by, without),
-    avgBy(by):: self.avg(by, ''),
-    avgWithout(without):: self.avg('', without),
-    min(by='', without=''):: self._agg('min', by, without),
-    minBy(by):: self.min(by, ''),
-    minWithout(without):: self.min('', without),
-    max(by='', without=''):: self._agg('max', by, without),
-    maxBy(by):: self.max(by, ''),
-    maxWithout(without):: self.max('', without),
-    stddev(by='', without=''):: self._agg('stddev', by, without),
-    stddevBy(by):: self.stddev(by, ''),
-    stddevWithout(without):: self.stddev('', without),
-    stdvar(by='', without=''):: self._agg('stdvar', by, without),
-    stdvarBy(by):: self.stdvar(by, ''),
-    stdvarWithout(without):: self.stdvar('', without),
-    count(by='', without=''):: self._agg('count', by, without),
-    countBy(by):: self.count(by, ''),
-    countWithout(without):: self.count('', without),
+    sum(by=[], without=[]):: self._agg('sum', by, without),
+    sumBy(by):: self.sum(by=by),
+    sumWithout(without):: self.sum(without=without),
+    avg(by=[], without=[]):: self._agg('avg', by, without),
+    avgBy(by):: self.avg(by=by),
+    avgWithout(without):: self.avg(without=without),
+    min(by=[], without=[]):: self._agg('min', by, without),
+    minBy(by):: self.min(by=by),
+    minWithout(without):: self.min(without=without),
+    max(by=[], without=[]):: self._agg('max', by, without),
+    maxBy(by):: self.max(by=by),
+    maxWithout(without):: self.max(without=without),
+    stddev(by=[], without=[]):: self._agg('stddev', by, without),
+    stddevBy(by):: self.stddev(by=by),
+    stddevWithout(without):: self.stddev(without=without),
+    stdvar(by=[], without=[]):: self._agg('stdvar', by, without),
+    stdvarBy(by):: self.stdvar(by=by),
+    stdvarWithout(without):: self.stdvar(without=without),
+    count(by=[], without=[]):: self._agg('count', by, without),
+    countBy(by):: self.count(by=by),
+    countWithout(without):: self.count(without=without),
 
     // builds the query
     build(formatted=true)::
