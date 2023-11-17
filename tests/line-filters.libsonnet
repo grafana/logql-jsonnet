@@ -1,4 +1,4 @@
-local logql = import "../logql.libsonnet";
+local logql = import '../logql.libsonnet';
 
 [
   [
