@@ -11,7 +11,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avg_over_time('1m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1m])'
@@ -26,7 +26,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avgOverTime('1m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1m])'
@@ -41,7 +41,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avg_over_time('1h', '5m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
@@ -56,7 +56,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avgOverTime('1h', '5m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
@@ -71,7 +71,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avg_over_time('1h:5m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
@@ -86,7 +86,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avgOverTime('1h:5m')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
@@ -101,7 +101,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avg_over_time(' [ 1h:5m]  ')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
@@ -116,7 +116,7 @@ local logql = import '../../logql.libsonnet';
       })
       .line().eq('error')
       .logfmt()
-      .unwrapBytes('response_size')
+      .unwrap_bytes('response_size')
       .avgOverTime(' [ 1h:5m]  ')
       .build(formatted=false),
     'avg_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'

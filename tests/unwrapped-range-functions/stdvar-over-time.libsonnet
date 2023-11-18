@@ -17,7 +17,7 @@ local logql = import '../../logql.libsonnet';
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1m])'
   ],
   [
-    "it supports stdVarOverTime",
+    "it supports stdvarOverTime",
     logql.new()
       .withLabels({
         app: 'ecommerce',
@@ -27,7 +27,7 @@ local logql = import '../../logql.libsonnet';
       .line().eq('error')
       .logfmt()
       .unwrapBytes('response_size')
-      .stdVarOverTime('1m')
+      .stdvarOverTime('1m')
       .build(formatted=false),
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1m])'
   ],
@@ -47,7 +47,7 @@ local logql = import '../../logql.libsonnet';
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
   [
-    "it supports stdVarOverTime with interval and resolution",
+    "it supports stdvarOverTime with interval and resolution",
     logql.new()
       .withLabels({
         app: 'ecommerce',
@@ -57,7 +57,7 @@ local logql = import '../../logql.libsonnet';
       .line().eq('error')
       .logfmt()
       .unwrapBytes('response_size')
-      .stdVarOverTime('1h', '5m')
+      .stdvarOverTime('1h', '5m')
       .build(formatted=false),
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
@@ -77,7 +77,7 @@ local logql = import '../../logql.libsonnet';
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
   [
-    "it supports stdVarOverTime with interval:resolution combined",
+    "it supports stdvarOverTime with interval:resolution combined",
     logql.new()
       .withLabels({
         app: 'ecommerce',
@@ -87,7 +87,7 @@ local logql = import '../../logql.libsonnet';
       .line().eq('error')
       .logfmt()
       .unwrapBytes('response_size')
-      .stdVarOverTime('1h:5m')
+      .stdvarOverTime('1h:5m')
       .build(formatted=false),
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
@@ -107,7 +107,7 @@ local logql = import '../../logql.libsonnet';
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
   [
-    "it supports stdVarOverTime with interval:resolution combined with bad formatting",
+    "it supports stdvarOverTime with interval:resolution combined with bad formatting",
     logql.new()
       .withLabels({
         app: 'ecommerce',
@@ -117,7 +117,7 @@ local logql = import '../../logql.libsonnet';
       .line().eq('error')
       .logfmt()
       .unwrapBytes('response_size')
-      .stdVarOverTime(' [ 1h:5m]  ')
+      .stdvarOverTime(' [ 1h:5m]  ')
       .build(formatted=false),
     'stdvar_over_time({app="ecommerce", cluster="primary", region="us-east-1"} |= `error` | logfmt | unwrap bytes(response_size) [1h:5m])'
   ],
