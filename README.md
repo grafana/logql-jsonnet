@@ -289,11 +289,15 @@ logql.new()
 
 | Function / Operation | Sample Usage | Description |
 | :---------------- | :----------- | :----------- |
-| `.rate(interval, resolution?)`  | `.rate('5m')` | Calculates the number of entries per second |
-| `.count_over_time(interval, resolution?)` | `.count_over_time('5m')` | Counts the entries for each log stream within the given range |
-| `.bytes_rate(interval, resolution?)`  | `.bytes_rate('5m')` | Calculates the number of bytes per second for each stream. |
-| `.bytes_over_time(interval, resolution?)` | `.bytes_over_time('5m')` | Counts the amount of bytes used by each log stream for a given range |
-| `.absent_over_time(interval, resolution?)`  | `.absent_over_time('5m')` | Returns an empty vector if the range vector passed to it has any elements and a 1-element vector with the value 1 if the range vector passed to it has no elements |
+| `.rate(interval, resolution?, offset?)`  | `.rate('5m')` | Calculates the number of entries per second |
+| `.count_over_time(interval, resolution?, offset?)` | `.count_over_time('5m')` | Counts the entries for each log stream within the given range |
+| `.countOverTime(interval, resolution?, offset?)` | `.countOverTime('5m')` | Wrapper for `.count_over_time()` |
+| `.bytes_rate(interval, resolution?, offset?)`  | `.bytes_rate('5m')` | Calculates the number of bytes per second for each stream. |
+| `.bytesRate(interval, resolution?, offset?)`  | `.bytesRate('5m')` | Wrapper for `.bytes_rate()` |
+| `.bytes_over_time(interval, resolution?, offset?)` | `.bytes_over_time('5m')` | Counts the amount of bytes used by each log stream for a given range |
+| `.bytesOverTime(interval, resolution?, offset?)` | `.bytesOverTime('5m')` | Wrapper for `.bytes_over_time()` |
+| `.absent_over_time(interval, resolution?, offset?)`  | `.absent_over_time('5m')` | Returns an empty vector if the range vector passed to it has any elements and a 1-element vector with the value 1 if the range vector passed to it has no elements |
+| `.absentOverTime(interval, resolution?, offset?)`  | `.absentOverTime('5m')` | Wrapper for `.absent_over_time()` |
 
 #### Example Range Aggregation Usage
 
@@ -320,5 +324,161 @@ count_over_time(
 | Function / Operation | Sample Usage | Description |
 | :---------------- | :----------- | :----------- |
 | `.unwrap(label)`  | `.unwrap('response_bytes')` | Sets the label to unwrap for the aggregation. Unwrapped ranges uses extracted labels as sample values instead of log lines.  |
-| `.unwrapDuration(label)` | `.unwrapDuration('response_time')` | Unwraps the label and converts the value from a [go duration format](https://golang.org/pkg/time/#ParseDuration) to seconds |
-| `.unwrapBytes(label)`  | `.unwrapBytes('response_size')` | Unwraps the label and converts the value from a bytes unit to bytes |
+| `.unwrap_duration(label)` | `.unwrap_duration('response_time')` | Unwraps the label and converts the value from a [go duration format](https://golang.org/pkg/time/#ParseDuration) to seconds |
+| `.unwrapDuration(label)` | `.unwrapDuration('response_time')` | Wrapper for `.unwrap_duration()` |
+| `.unwrap_bytes(label)`  | `.unwrap_bytes('response_size')` | Unwraps the label and converts the value from a bytes unit to bytes |
+| `.unwrapBytes(label)`  | `.unwrapBytes('response_size')` | Wrapper for `.unwrap_bytes()` |
+| `.avg_over_time(interval, resolution?, offset?, by?, without?)` | `.avg_over_time('5m')` | Calculates the average value of all points in the specified interval. |
+| `.avg_over_time_by(interval, by, resolution?, offset?)` | `.avg_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
+| `.avg_over_time_without(interval, without, resolution?, offset?)` | `.avg_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
+| `.avgOverTime(interval, resolution?, offset?, by?, without?)` | `.avgOverTime('5m')` | Wrapper for `avg_over_time()` |
+| `.avgOverTimeBy(interval, by, resolution?, offset?)` | `.avgOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
+| `.avgOverTimeWithout(interval, without, resolution?, offset?)` | `.avgOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
+| `.min_over_time(interval, resolution?, offset?, by?, without?)` | `.min_over_time('5m')` | Calculates the minimum value of all points in the specified interval |
+| `.min_over_time_by(interval, by, resolution?, offset?)` | `.min_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
+| `.min_over_time_without(interval, without, resolution?, offset?)` | `.min_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
+| `.minOverTime(interval, resolution?, offset?, by?, without?)` | `.minOverTime('5m')` | Wrapper for `min_over_time()` |
+| `.minOverTimeBy(interval, by, resolution?, offset?)` | `.minOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
+| `.minOverTimeWithout(interval, without, resolution?, offset?)` | `.minOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
+| `.max_over_time(interval, resolution?, offset?, by?, without?)` | `.max_over_time('5m')` | Calculates the maximum value of all points in the specified interval. |
+| `.max_over_time_by(interval, by, resolution?, offset?)` | `.max_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
+| `.max_over_time_without(interval, without, resolution?, offset?)` | `.max_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
+| `.maxOverTime(interval, resolution?, offset?, by?, without?)` | `.maxOverTime('5m')` | Wrapper for `max_over_time()` |
+| `.maxOverTimeBy(interval, by, resolution?, offset?)` | `.maxOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
+| `.maxOverTimeWithout(interval, without, resolution?, offset?)` | `.maxOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
+| `.first_over_time(interval, resolution?, offset?, by?, without?)` | `.first_over_time('5m')` | Calculates the first value of all points in the specified interval |
+| `.first_over_time_by(interval, by, resolution?, offset?)` | `.first_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
+| `.first_over_time_without(interval, without, resolution?, offset?)` | `.first_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
+| `.firstOverTime(interval, resolution?, offset?, by?, without?)` | `.firstOverTime('5m')` | Wrapper for `first_over_time()` |
+| `.firstOverTimeBy(interval, by, resolution?, offset?)` | `.firstOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
+| `.firstOverTimeWithout(interval, without, resolution?, offset?)` | `.firstOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
+| `.last_over_time(interval, resolution?, offset?, by?, without?)` | `.last_over_time('5m')` | Calculates the last value of all points in the specified interval |
+| `.last_over_time_by(interval, by, resolution?, offset?)` | `.last_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
+| `.last_over_time_without(interval, without, resolution?, offset?)` | `.last_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
+| `.lastOverTime(interval, resolution?, offset?, by?, without?)` | `.lastOverTime('5m')` | Wrapper for `last_over_time()` |
+| `.lastOverTimeBy(interval, by, resolution?, offset?)` | `.lastOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
+| `.lastOverTimeWithout(interval, without, resolution?, offset?)` | `.lastOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
+| `.rate_counter(interval, resolution?, offset?)` | `.rate_counter('5m')` | Calculates per second rate of the values in the specified interval and treating them as "counter metric" |
+| `.rateCounter(interval, resolution?, offset?)` | `.rate_counter('5m')` | c |
+| `.stdvar_over_time(interval, resolution?, offset?, by?, without?)` | `.stdvar_over_time('5m', ['region', 'cluster'])` | Calculates the population standard variance of the values in the specified interval. |
+Wrapper for `stdvar_over_time()` |
+| `.stdvar_over_time_without(interval, without, resolution?, offset?)` | `.stdvar_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
+| `.stdvarOverTime(interval, resolution?, offset?, by?, without?)` | `.stdvarOverTime('5m')` | Wrapper for `stdvar_over_time()` |
+| `.stdvarOverTimeBy(interval, by, resolution?, offset?)` | `.stdvarOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
+| `.stdvarOverTimeWithout(interval, without, resolution?, offset?)` | `.stdvarOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
+| `.stddev_over_time(interval, resolution?, offset?, by?, without?)` | `.stddev_over_time('5m')` | Calculates the population standard deviation of the values in the specified interval. |
+| `.stddev_over_time_by(interval, by, resolution?, offset?)` | `.stddev_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
+| `.stddev_over_time_without(interval, without, resolution?, offset?)` | `.stddev_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
+| `.stddevOverTime(interval, resolution?, offset?, by?, without?)` | `.stddevOverTime('5m')` | Wrapper for `stddev_over_time()` |
+| `.stddevOverTimeBy(interval, by, resolution?, offset?)` | `.stddevOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
+| `.stddevOverTimeWithout(interval, without, resolution?, offset?)` | `.stddevOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
+| `.quantile_over_time(quantile, interval, resolution?, offset?, by?, without?)` | `.quantile_over_time('0.95', '5m')` | Calculates the φ-quantile (0 ≤ φ ≤ 1) of the values in the specified interval. |
+| `.quantile_over_time_by(quantile, interval, by, resolution?, offset?)` | `.quantile_over_time_by('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
+| `.quantile_over_time_without(quantile, interval, without, resolution?, offset?)` | `.quantile_over_time_without('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
+| `.quantileOverTime(quantile, interval, resolution?, offset?, by?, without?)` | `.quantileOverTime('0.95', '5m')` | Wrapper for `quantile_over_time()` |
+| `.quantileOverTimeBy(quantile, interval, by, resolution?, offset?)` | `.quantileOverTimeBy('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
+| `.quantileOverTimeWithout(quantile, interval, without, resolution?, offset?)` | `.quantileOverTimeWithout('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
+
+#### Example Unwrapped Range Aggregation Usage
+
+```js
+logql.new()
+  .selector('app').eq('ecommerce')
+  .selector('cluster').eq('primary')
+  .selector('env').eq('dev|test')
+  .line().re('level=(error|warn)')
+  .count_over_time('5m')
+  .build()
+
+// renders
+avg_over_time(
+  {app="ecommerce", cluster="primary", region="us-east-1"}
+  |= `error`
+  | logfmt
+  | unwrap bytes(response_size) [1h:5m]
+) by (cluster, region)
+```
+
+### Aggregation Expressions
+
+[LogQL Formatting Documentation](https://grafana.com/docs/loki/latest/query/metric_queries/#built-in-aggregation-operators)
+
+| Function / Operation | Sample Usage | Description |
+| :---------------- | :----------- | :----------- |
+| `.sum(by?, without?)` |  `.sum()` | Calculate sum over labels |
+| `.sum_by(by)` |  `.sumBy(['cluster', 'region'])` | Wrapper for `sum(by=[])` |
+| `.sumBy(by)` |  `.sumBy(['cluster', 'region'])` | Wrapper for `sum(by=[])` |
+| `.sum_without(without)` |  `.sumWithout(['cluster', 'region')` | Wrapper for `sum(without=[])` |
+| `.sumWithout(without)` |  `.sumWithout(['cluster', 'region')` | Wrapper for `sum(without=[])` |
+| `.avg(by?, without?)` |  `.avg()` | Calculate the average over labels |
+| `.avg_by(by)` |  `.avgBy(['cluster', 'region')` | Wrapper for `avg(by=[])` |
+| `.avgBy(by)` |  `.avgBy(['cluster', 'region')` | Wrapper for `avg(by=[])` |
+| `.avg_without(without)` |  `.avgWithout(['cluster', 'region')` | Wrapper for `avg(without=[])` |
+| `.avgWithout(without)` |  `.avgWithout(['cluster', 'region')` | Wrapper for `avg(without=[])` |
+| `.min(by?, without?)` |  `.min()` |  Select minimum over labels |
+| `.min_by(by)` |  `.minBy(['cluster', 'region')` | Wrapper for `min(by=[])` |
+| `.minBy(by)` |  `.minBy(['cluster', 'region')` | Wrapper for `min(by=[])` |
+| `.min_without(without)` |  `.minWithout(['cluster', 'region')` | Wrapper for `min(without=[])` |
+| `.minWithout(without)` |  `.minWithout(['cluster', 'region')` | Wrapper for `min(without=[])` |
+| `.max(by?, without?)` |  `.max()` | Select maximum over labels |
+| `.max_by(by)` |  `.maxBy(['cluster', 'region')` | Wrapper for `max(by=[])` |
+| `.maxBy(by)` |  `.maxBy(['cluster', 'region')` | Wrapper for `max(by=[])` |
+| `.max_without(without)` |  `.maxWithout(['cluster', 'region')` | Wrapper for `max(without=[])` |
+| `.maxWithout(without)` |  `.maxWithout(['cluster', 'region')` | Wrapper for `max(without=[])` |
+| `.stddev(by?, without?)` |  `.stddev()` | Calculate the population standard deviation over labels |
+| `.stddev_by(by)` |  `.stddevBy(['cluster', 'region')` | Wrapper for `stddev(by=[])` |
+| `.stddevBy(by)` |  `.stddevBy(['cluster', 'region')` | Wrapper for `stddev(by=[])` |
+| `.stddev_without(without)` |  `.stddevWithout(['cluster', 'region')` | Wrapper for `stddev(without=[])` |
+| `.stddevWithout(without)` |  `.stddevWithout(['cluster', 'region')` | Wrapper for `stddev(without=[])` |
+| `.stdvar(by?, without?)` |  `.stdvar()` | Calculate the population standard variance over labels |
+| `.stdvar_by(by)` |  `.stdvarBy(['cluster', 'region')` | Wrapper for `stdvar(by=[])` |
+| `.stdvarBy(by)` |  `.stdvarBy(['cluster', 'region')` | Wrapper for `stdvar(by=[])` |
+| `.stdvar_without(without)` |  `.stdvarWithout(['cluster', 'region')` | Wrapper for `stdvar(without=[])` |
+| `.stdvarWithout(without)` |  `.stdvarWithout(['cluster', 'region')` | Wrapper for `stdvar(without=[])` |
+| `.count(by?, without?)` |  `.count()` | Count number of elements in the vector |
+| `.count_by(by)` |  `.countBy(['cluster', 'region')` | Wrapper for `count(by=[])` |
+| `.countBy(by)` |  `.countBy(['cluster', 'region')` | Wrapper for `count(by=[])` |
+| `.count_without(without)` |  `.countWithout(['cluster', 'region')` | Wrapper for `count(without=[])` |
+| `.countWithout(without)` |  `.countWithout(['cluster', 'region')` | Wrapper for `count(without=[])` |
+| `.topk(k, by?, without?)` |  `.topk(10)` | Select largest k elements by sample value |
+| `.topk_by(k, by)` |  `.topk_by(10, ['region'])` | Wrapper for `.topk(k, by=[])` |
+| `.topkBy(k, by)` |  `.topkBy(10, ['region'])` | Wrapper for `.topk(k, by=[])` |
+| `.topk_without(k, without)` |  `.topk_without(10, ['region'])` | Wrapper for `.topk(k, without=[])` |
+| `.topkWithout(k, without)` |  `.topkWithout(10, ['region'])` | Wrapper for `.topk(k, without=[])` |
+| `.bottomk(k, by?, without?)` |  `.bottomk(10)` | Select smallest k elements by sample value |
+| `.bottomk_by(k, by)` |  `.bottomk_by(10, ['region'])` | Wrapper for `.bottomk(k, by=[])` |
+| `.bottomkBy(k, by)` |  `.bottomkBy(10, ['region'])` | Wrapper for `.bottomk(k, by=[])` |
+| `.bottomk_without(k, without)` |  `.bottomk_without(10, ['region'])` | Wrapper for `.bottomk(k, without=[])` |
+| `.bottomkWithout(k, without)` |  `.bottomkWithout(10, ['region'])` | Wrapper for `.bottomk(k, without=[])` |
+| `.sort(by?, without?)` |  `.sort()` | returns vector elements sorted by their sample values, in ascending order. |
+| `.sort_by(by)` |  `.sort_by(['region', 'cluster'])` | Wrapper for `.sort(by=[])` |
+| `.sortBy(by)` |  `.sortBy(['region', 'cluster'])` |  Wrapper for `.sort(by=[])` |
+| `.sort_without(without)` |  `.sort_without(['region', 'cluster'])` | `.sort(without=[])` |
+| `.sortWithout(without)` |  `.sortWithout(['region', 'cluster'])` | `.sort(without=[])` |
+| `.sort_desc(by?, without?)` |  `.sort_desc()` | Same as sort, but sorts in descending order. |
+| `.sortDesc(by?, without?)` |  `.sortDesc()` | Wrapper for `.sort_desc()` |
+| `.sort_desc_by(by)` |  `.sort_desc_by(['region', 'cluster'])` | Wrapper for `.sort_desc(by=[])` |
+| `.sortDescBy(by)` |  `sortDescBy(['region', 'cluster'])` | Wrapper for `.sort_desc(by=[])` |
+| `.sort_desc_without(without)` |  `.sort_desc_without(['region', 'cluster'])` | Wrapper for `.sort_desc(without=[])` |
+| `.sortDescWithout(without)` |  `.sortDescWithout(['region', 'cluster'])` | Wrapper for `.sort_desc(without=[])` |
+
+#### Example Unwrapped Range Aggregation Usage
+
+```js
+logql.new()
+  .selector('app').eq('ecommerce')
+  .selector('cluster').eq('primary')
+  .selector('env').eq('dev|test')
+  .line().re('level=(error|warn)')
+  .count_over_time('5m')
+  .build()
+
+// renders
+sort_desc(
+  sum by (region, cluster) (
+    count_over_time(
+      {app="ecommerce", cluster="primary", region="us-east-1"} |= `error` [1m]
+    )
+  )
+)
+```
