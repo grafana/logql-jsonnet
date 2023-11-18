@@ -8,11 +8,11 @@ A [Jsonnet](https://jsonnet.org/) based DSL for writing [LogQL](https://grafana.
 
 [LogQL Stream Selector Documentation](https://grafana.com/docs/loki/latest/query/log_queries/#log-stream-selector)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.withLabels(object)`   | `.withLabels({cluster: "primary",region: 'us-east-1'})` | Accepts an object using the key as the label and the value as the value of the predicate, only uses equality `=` |
-| `.withLabel(label, op, value)`   | `.withLabel('region', '!=','us-east-1')` | Sets a single label selector, with specific arguments for the `label`, `op` and `value` |
-| `.withLabel(object)`   | `.withLabel({label: 'region', op: '!=', value: 'us-east-1'})` | The method is overloaded, and also accepts a single object as an argument the keys `label`, `op` and `value`. |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.withLabels(object)`   | Accepts an object using the key as the label and the value as the value of the predicate, only uses equality `=` <br>Usage: `.withLabels({cluster: "primary",region: 'us-east-1'})` |
+| `.withLabel(label, op, value)`   | Sets a single label selector, with specific arguments for the `label`, `op` and `value` <br>Usage: `.withLabel('region', '!=','us-east-1')` |
+| `.withLabel(object)`   | The method is overloaded, and also accepts a single object as an argument the keys `label`, `op` and `value`. <br>Usage: `.withLabel({label: 'region', op: '!=', value: 'us-east-1'})` |
 
 #### Example Stream Selector Usage
 
@@ -31,12 +31,12 @@ logql.new()
 
 To support a more fluent api, a single method of `selector()` is provided that returns an object of methods to chain from.
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.eq(value)` | `.selector('region').eq('us-east-1')` | Generates a single label equality label selector |
-| `.neq(value)` | `.selector('region').neq('us-east-1')` | Generates a single label not equal label selector |
-| `.re(value)` | `.selector('region').re('us-east-1')` | Generates a single label regex matches label selector |
-| `.nre(value)` | `.selector('region').nre('us-east-1')` | Generates a single label not regex matches label selector |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.eq(value)` | Generates a single label equality label selector <br>Usage: `.selector('region').eq('us-east-1')` |
+| `.neq(value)` | Generates a single label not equal label selector <br>Usage: `.selector('region').neq('us-east-1')` |
+| `.re(value)` | Generates a single label regex matches label selector <br>Usage: `.selector('region').re('us-east-1')` |
+| `.nre(value)` | Generates a single label not regex matches label selector <br>Usage: `.selector('region').nre('us-east-1')` |
 
 #### Example Stream Selector Fluent Usage
 
@@ -58,12 +58,12 @@ logql.new()
 
 [LogQL Line Filter Documentation](https://grafana.com/docs/loki/latest/query/log_queries/#line-filter-expression)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.lineEq(text)`   | `.lineEq('error')` | Filters a line to ensure that the line contains the specified text. |
-| `.lineNeq(text)`   | `.lineNeq('error')` | Filters a line to ensure that the line does not contains the specified text. |
-| `.lineRe(text)`   | `.lineRe('error')` | Filters a line to ensure that the line matches the specified regular expression. |
-| `.lineNre(text)`   | `.lineNre('error')` | Filters a line to ensure that the line does not match the specified regular expression. |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.lineEq(text)`   | Filters a line to ensure that the line contains the specified text. <br>Usage: `.lineEq('error')` |
+| `.lineNeq(text)`   | Filters a line to ensure that the line does not contains the specified text. <br>Usage: `.lineNeq('error')` |
+| `.lineRe(text)`   | Filters a line to ensure that the line matches the specified regular expression. <br>Usage: `.lineRe('error')` |
+| `.lineNre(text)`   | Filters a line to ensure that the line does not match the specified regular expression. <br>Usage: `.lineNre('error')` |
 
 #### Example Line Filter Usage
 
@@ -84,12 +84,12 @@ logql.new()
 
 To support a more fluent api, a single method of `line()` is provided that returns an object of methods to chain from.
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.eq(value)` | `line().eq('error')` | Generates a single line contains filter |
-| `.neq(value)` | `line().neq('error')` | Generates a single line does not contains filter |
-| `.re(value)` | `line().re('error')` | Generates a single line matches regular expression filter |
-| `.nre(value)` | `line().nre('error')` |  Generates a single line does not matchregular expression filter |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.eq(value)` | Generates a single line contains filter <br>Usage: `line().eq('error')` |
+| `.neq(value)` | Generates a single line does not contains filter <br>Usage: `line().neq('error')` |
+| `.re(value)` | Generates a single line matches regular expression filter <br>Usage: `line().re('error')` |
+| `.nre(value)` |  Generates a single line does not matchregular expression filter <br>Usage: `line().nre('error')` |
 
 #### Example Line Filter Fluent Usage
 
@@ -110,12 +110,12 @@ logql.new()
 
 [LogQL Parser Documentation](https://grafana.com/docs/loki/latest/query/log_queries/#parser-expression)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.json(labels?)`   | `.json()` | Parses the log line as `json`, optionally extracting specific values and assigning to a label. |
-| `.logfmt(labels?)`   | `.logfmt()` | Parses the log line as `logfmt`, optionally extracting specific values and assigning to a label |
-| `.pattern(pattern)`   | `.pattern('<_> level=<level> <_>')` | Parses the line using the `pattern` parser extracting values and assigning to labels |
-| `.regex(pattern)`   | `.regex('.+ level=(?P<level>[^ ]+) .+')` | Parses the line using the `regex` parser extracting placeholder values and assigning to labels |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.json(labels?)`   | Parses the log line as `json`, optionally extracting specific values and assigning to a label. <br>Usage: `.json()` |
+| `.logfmt(labels?)`   | Parses the log line as `logfmt`, optionally extracting specific values and assigning to a label <br>Usage: `.logfmt()` |
+| `.pattern(pattern)`   | Parses the line using the `pattern` parser extracting values and assigning to labels <br>Usage: `.pattern('<_> level=<level> <_>')` |
+| `.regex(pattern)`   | Parses the line using the `regex` parser extracting placeholder values and assigning to labels <br>Usage: `.regex('.+ level=(?P<level>[^ ]+) .+')` |
 
 #### Example Parser Usage
 
@@ -138,17 +138,17 @@ logql.new()
 
 [LogQL Label Filter Documentation](https://grafana.com/docs/loki/latest/query/log_queries/#label-filter-expression)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.labelEq(label, value)`  | `.labelEq('status_code', 200)` | Performs an equal to check on a label and value. |
-| `.labelNeq(label, value)` | `.labelNeq('status_code', 200)` | Performs a not equal to check on a label and value  |
-| `.labelGt(label, value)`  | `.labelGt('status_code', 200)` | Performs a greater than check on a label and value |
-| `.labelGte(label, value)` | `.labelGte('status_code', 200)` | Performs a greater than or equal to check on a label and value |
-| `.labelLt(label, value)`  | `.labelLt('status_code', 200)` | Performs a less than check on a label and value |
-| `.labelLte(label, value)` | `.labelLte('status_code', 200)` | Performs a less than or equal to check on label and value |
-| `.labelRe(label, value)`  | `.labelRe('status_code', '2..')`  | Performs a regular expression match check on a label and value |
-| `.labelNre(label, value)` | `.labelNre('status_code', '2..')` | Performs a regular expression does not match check on a label and value |
-| `.labelNoop(label)` | `.labelNoop('status_code')` | Adds just the label with no check, mainly used in `drop` / `keep` |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.labelEq(label, value)` | Performs an equal to check on a label and value. <br>Usage: `.labelEq('status_code', 200)` |
+| `.labelNeq(label, value)` | Performs a not equal to check on a label and value  <br>Usage: `.labelNeq('status_code', 200)` |
+| `.labelGt(label, value)` | Performs a greater than check on a label and value <br>Usage: `.labelGt('status_code', 200)` |
+| `.labelGte(label, value)` | Performs a greater than or equal to check on a label and value <br>Usage: `.labelGte('status_code', 200)` |
+| `.labelLt(label, value)` | Performs a less than check on a label and value <br>Usage: `.labelLt('status_code', 200)` |
+| `.labelLte(label, value)` | Performs a less than or equal to check on label and value <br>Usage: `.labelLte('status_code', 200)` |
+| `.labelRe(label, value)` | Performs a regular expression match check on a label and value <br>Usage: `.labelRe('status_code', '2..')` |
+| `.labelNre(label, value)` | Performs a regular expression does not match check on a label and value <br>Usage: `.labelNre('status_code', '2..')` |
+| `.labelNoop(label)` | Adds just the label with no check, mainly used in `drop` / `keep` <br>Usage: `.labelNoop('status_code')` |
 
 #### Example Label Filter Usage
 
@@ -173,17 +173,17 @@ logql.new()
 
 To support a more fluent api, a single method of `label(label)` is provided that returns an object of methods to chain from.
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.eq(value)`  | `.label('status_code').eq(200)`| Performs an equal to check on a label and value. |
-| `.neq(value)` | `.label('status_code').neq(200)` | Performs a not equal to check on a label and value  |
-| `.gt(value)`  | `.label('status_code').gt(200)`| Performs a greater than check on a label and value |
-| `.gte(value)` | `.label('status_code').gte(200)` | Performs a greater than or equal to check on a label and value |
-| `.lt(value)`  | `.label('status_code').lt(200)`| Performs a less than check on a label and value |
-| `.lte(value)` | `.label('status_code').lte(200)` | Performs a less than or equal to check on label and value |
-| `.re(value)`  | `.label('status_code').re('2..')`  | Performs a regular expression match check on a label and value |
-| `.nre(value)` | `.label('status_code').nre('2..')` | Performs a regular expression does not match check on a label and value |
-| `.noop()` | `.label('status_code').noop()` | Adds just the label with no check, mainly used in `drop` / `keep` |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.eq(value)` | Performs an equal to check on a label and value. <br>Usage: `.label('status_code').eq(200)` |
+| `.neq(value)` | Performs a not equal to check on a label and value  <br>Usage: `.label('status_code').neq(200)` |
+| `.gt(value)` | Performs a greater than check on a label and value <br>Usage: `.label('status_code').gt(200)` |
+| `.gte(value)` | Performs a greater than or equal to check on a label and value <br>Usage: `.label('status_code').gte(200)` |
+| `.lt(value)` | Performs a less than check on a label and value <br>Usage: `.label('status_code').lt(200)` |
+| `.lte(value)` | Performs a less than or equal to check on label and value <br>Usage: `.label('status_code').lte(200)` |
+| `.re(value)` | Performs a regular expression match check on a label and value <br>Usage: `.label('status_code').re('2..')` |
+| `.nre(value)` | Performs a regular expression does not match check on a label and value <br>Usage: `.label('status_code').nre('2..')` |
+| `.noop()` | Adds just the label with no check, mainly used in `drop` / `keep` <br>Usage: `.label('status_code').noop()` |
 
 #### Example Label Filter Fluent Usage
 
@@ -206,10 +206,10 @@ logql.new()
 
 ### Logical Operator Expressions
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.and(exprs[])`  | `.and(['status_code == 200','response_time > 200ms'])` | Performs a logical `and` operation on the expressions |
-| `.or(exprs[])` | `.or(['status_code == 200','response_time > 200ms'])` |  Performs a logical `or` operation on the expressions  |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.and(exprs[])` | Performs a logical `and` operation on the expressions <br>Usage: `.and(['status_code == 200','response_time > 200ms'])` |
+| `.or(exprs[])` |  Performs a logical `or` operation on the expressions  <br>Usage: `.or(['status_code == 200','response_time > 200ms'])` |
 
 #### Example Logical Operator Usage
 
@@ -242,15 +242,14 @@ logql.new()
 
 [LogQL Formatting Documentation](https://grafana.com/docs/loki/latest/query/log_queries/#line-format-expression)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.line_format(format)`  | `.line_format('{{ .request_method }}: {{ .status_code }}')` | Rewrites the log line content by using the [text/template](https://golang.org/pkg/text/template/) format |
-| `.lineFormat(format)` | `.lineFormat('{{ .request_method }}: {{ .status_code }}')` | Wrapper for `.line_format()` |
-| `.label_format(label, path)` | `.label_format('response_size', '{{ .response_size \| lower }}')` | Rename, modifies or adds labels |
-| `.labelFormat(label, path)` | `.labelFormat('response_size', '{{ .response_size \| lower }}')` | Wrapper for `.label_format()` |
-| `.decolorize()`  | `.decolorize()` | Strips ANSI sequences (color codes) from the line |
-| `.drop(labels[])` | `.drop(['instance_id','host'])` | Drops one or more labels or labels with a conditional check |
-| `.keep(labels[])`  | `.keep(['status_code', 'method', 'response_size', 'path'])` | Keeps one or more labels or labels with a conditional check, dropping all other labels |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.line_format(format)` | Rewrites the log line content by using the [text/template](https://golang.org/pkg/text/template/) format <br>Usage: `.line_format('{{ .request_method }}: {{ .status_code }}')` |
+| `.lineFormat(format)` | Wrapper for `.line_format()` <br>Usage: `.lineFormat('{{ .request_method }}: {{ .status_code }}')` |
+| `.labelFormat(label, path)` | Wrapper for `.label_format()` <br>Usage: `.labelFormat('response_size', '{{ .response_size \| lower }}')` |
+| `.decolorize()` | Strips ANSI sequences (color codes) from the line <br>Usage: `.decolorize()` |
+| `.drop(labels[])` | Drops one or more labels or labels with a conditional check <br>Usage: `.drop(['instance_id','host'])` |
+| `.keep(labels[])` | Keeps one or more labels or labels with a conditional check, dropping all other labels <br>Usage: `.keep(['status_code', 'method', 'response_size', 'path'])` |
 
 #### Example Label Filter Usage
 
@@ -287,17 +286,17 @@ logql.new()
 
 [LogQL Formatting Documentation](https://grafana.com/docs/loki/latest/query/metric_queries/#log-range-aggregations)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.rate(interval, resolution?, offset?)`  | `.rate('5m')` | Calculates the number of entries per second |
-| `.count_over_time(interval, resolution?, offset?)` | `.count_over_time('5m')` | Counts the entries for each log stream within the given range |
-| `.countOverTime(interval, resolution?, offset?)` | `.countOverTime('5m')` | Wrapper for `.count_over_time()` |
-| `.bytes_rate(interval, resolution?, offset?)`  | `.bytes_rate('5m')` | Calculates the number of bytes per second for each stream. |
-| `.bytesRate(interval, resolution?, offset?)`  | `.bytesRate('5m')` | Wrapper for `.bytes_rate()` |
-| `.bytes_over_time(interval, resolution?, offset?)` | `.bytes_over_time('5m')` | Counts the amount of bytes used by each log stream for a given range |
-| `.bytesOverTime(interval, resolution?, offset?)` | `.bytesOverTime('5m')` | Wrapper for `.bytes_over_time()` |
-| `.absent_over_time(interval, resolution?, offset?)`  | `.absent_over_time('5m')` | Returns an empty vector if the range vector passed to it has any elements and a 1-element vector with the value 1 if the range vector passed to it has no elements |
-| `.absentOverTime(interval, resolution?, offset?)`  | `.absentOverTime('5m')` | Wrapper for `.absent_over_time()` |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.rate(interval, resolution?, offset?)` | Calculates the number of entries per second <br>Usage: `.rate('5m')` |
+| `.count_over_time(interval, resolution?, offset?)` | Counts the entries for each log stream within the given range <br>Usage: `.count_over_time('5m')` |
+| `.countOverTime(interval, resolution?, offset?)` | Wrapper for `.count_over_time()` <br>Usage: `.countOverTime('5m')` |
+| `.bytes_rate(interval, resolution?, offset?)` | Calculates the number of bytes per second for each stream. <br>Usage: `.bytes_rate('5m')` |
+| `.bytesRate(interval, resolution?, offset?)` | Wrapper for `.bytes_rate()` <br>Usage: `.bytesRate('5m')` |
+| `.bytes_over_time(interval, resolution?, offset?)` | Counts the amount of bytes used by each log stream for a given range <br>Usage: `.bytes_over_time('5m')` |
+| `.bytesOverTime(interval, resolution?, offset?)` | Wrapper for `.bytes_over_time()` <br>Usage: `.bytesOverTime('5m')` |
+| `.absent_over_time(interval, resolution?, offset?)` | Returns an empty vector if the range vector passed to it has any elements and a 1-element vector with the value 1 if the range vector passed to it has no elements <br>Usage: `.absent_over_time('5m')` |
+| `.absentOverTime(interval, resolution?, offset?)` | Wrapper for `.absent_over_time()` <br>Usage: `.absentOverTime('5m')` |
 
 #### Example Range Aggregation Usage
 
@@ -321,63 +320,63 @@ count_over_time(
 
 [LogQL Formatting Documentation](https://grafana.com/docs/loki/latest/query/metric_queries/#unwrapped-range-aggregations)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.unwrap(label)`  | `.unwrap('response_bytes')` | Sets the label to unwrap for the aggregation. Unwrapped ranges uses extracted labels as sample values instead of log lines.  |
-| `.unwrap_duration(label)` | `.unwrap_duration('response_time')` | Unwraps the label and converts the value from a [go duration format](https://golang.org/pkg/time/#ParseDuration) to seconds |
-| `.unwrapDuration(label)` | `.unwrapDuration('response_time')` | Wrapper for `.unwrap_duration()` |
-| `.unwrap_bytes(label)`  | `.unwrap_bytes('response_size')` | Unwraps the label and converts the value from a bytes unit to bytes |
-| `.unwrapBytes(label)`  | `.unwrapBytes('response_size')` | Wrapper for `.unwrap_bytes()` |
-| `.avg_over_time(interval, resolution?, offset?, by?, without?)` | `.avg_over_time('5m')` | Calculates the average value of all points in the specified interval. |
-| `.avg_over_time_by(interval, by, resolution?, offset?)` | `.avg_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
-| `.avg_over_time_without(interval, without, resolution?, offset?)` | `.avg_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
-| `.avgOverTime(interval, resolution?, offset?, by?, without?)` | `.avgOverTime('5m')` | Wrapper for `avg_over_time()` |
-| `.avgOverTimeBy(interval, by, resolution?, offset?)` | `.avgOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
-| `.avgOverTimeWithout(interval, without, resolution?, offset?)` | `.avgOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `avg_over_time()` |
-| `.min_over_time(interval, resolution?, offset?, by?, without?)` | `.min_over_time('5m')` | Calculates the minimum value of all points in the specified interval |
-| `.min_over_time_by(interval, by, resolution?, offset?)` | `.min_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
-| `.min_over_time_without(interval, without, resolution?, offset?)` | `.min_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
-| `.minOverTime(interval, resolution?, offset?, by?, without?)` | `.minOverTime('5m')` | Wrapper for `min_over_time()` |
-| `.minOverTimeBy(interval, by, resolution?, offset?)` | `.minOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
-| `.minOverTimeWithout(interval, without, resolution?, offset?)` | `.minOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `min_over_time()` |
-| `.max_over_time(interval, resolution?, offset?, by?, without?)` | `.max_over_time('5m')` | Calculates the maximum value of all points in the specified interval. |
-| `.max_over_time_by(interval, by, resolution?, offset?)` | `.max_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
-| `.max_over_time_without(interval, without, resolution?, offset?)` | `.max_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
-| `.maxOverTime(interval, resolution?, offset?, by?, without?)` | `.maxOverTime('5m')` | Wrapper for `max_over_time()` |
-| `.maxOverTimeBy(interval, by, resolution?, offset?)` | `.maxOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
-| `.maxOverTimeWithout(interval, without, resolution?, offset?)` | `.maxOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `max_over_time()` |
-| `.first_over_time(interval, resolution?, offset?, by?, without?)` | `.first_over_time('5m')` | Calculates the first value of all points in the specified interval |
-| `.first_over_time_by(interval, by, resolution?, offset?)` | `.first_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
-| `.first_over_time_without(interval, without, resolution?, offset?)` | `.first_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
-| `.firstOverTime(interval, resolution?, offset?, by?, without?)` | `.firstOverTime('5m')` | Wrapper for `first_over_time()` |
-| `.firstOverTimeBy(interval, by, resolution?, offset?)` | `.firstOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
-| `.firstOverTimeWithout(interval, without, resolution?, offset?)` | `.firstOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `first_over_time()` |
-| `.last_over_time(interval, resolution?, offset?, by?, without?)` | `.last_over_time('5m')` | Calculates the last value of all points in the specified interval |
-| `.last_over_time_by(interval, by, resolution?, offset?)` | `.last_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
-| `.last_over_time_without(interval, without, resolution?, offset?)` | `.last_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
-| `.lastOverTime(interval, resolution?, offset?, by?, without?)` | `.lastOverTime('5m')` | Wrapper for `last_over_time()` |
-| `.lastOverTimeBy(interval, by, resolution?, offset?)` | `.lastOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
-| `.lastOverTimeWithout(interval, without, resolution?, offset?)` | `.lastOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `last_over_time()` |
-| `.rate_counter(interval, resolution?, offset?)` | `.rate_counter('5m')` | Calculates per second rate of the values in the specified interval and treating them as "counter metric" |
-| `.rateCounter(interval, resolution?, offset?)` | `.rate_counter('5m')` | c |
-| `.stdvar_over_time(interval, resolution?, offset?, by?, without?)` | `.stdvar_over_time('5m', ['region', 'cluster'])` | Calculates the population standard variance of the values in the specified interval. |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.unwrap(label)` | Sets the label to unwrap for the aggregation. Unwrapped ranges uses extracted labels as sample values instead of log lines.  <br>Usage: `.unwrap('response_bytes')` |
+| `.unwrap_duration(label)` | Unwraps the label and converts the value from a [go duration format](https://golang.org/pkg/time/#ParseDuration) to seconds <br>Usage: `.unwrap_duration('response_time')` |
+| `.unwrapDuration(label)` | Wrapper for `.unwrap_duration()` <br>Usage: `.unwrapDuration('response_time')` |
+| `.unwrap_bytes(label)` | Unwraps the label and converts the value from a bytes unit to bytes <br>Usage: `.unwrap_bytes('response_size')` |
+| `.unwrapBytes(label)` | Wrapper for `.unwrap_bytes()` <br>Usage: `.unwrapBytes('response_size')` |
+| `.avg_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the average value of all points in the specified interval. <br>Usage: `.avg_over_time('5m')` |
+| `.avg_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `avg_over_time()` <br>Usage: `.avg_over_time_by('5m', ['region', 'cluster'])` |
+| `.avg_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `avg_over_time()` <br>Usage: `.avg_over_time_without('5m', ['region', 'cluster'])` |
+| `.avgOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `avg_over_time()` <br>Usage: `.avgOverTime('5m')` |
+| `.avgOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `avg_over_time()` <br>Usage: `.avgOverTimeBy('5m', ['region', 'cluster'])` |
+| `.avgOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `avg_over_time()` <br>Usage: `.avgOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.min_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the minimum value of all points in the specified interval <br>Usage: `.min_over_time('5m')` |
+| `.min_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `min_over_time()` <br>Usage: `.min_over_time_by('5m', ['region', 'cluster'])` |
+| `.min_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `min_over_time()` <br>Usage: `.min_over_time_without('5m', ['region', 'cluster'])` |
+| `.minOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `min_over_time()` <br>Usage: `.minOverTime('5m')` |
+| `.minOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `min_over_time()` <br>Usage: `.minOverTimeBy('5m', ['region', 'cluster'])` |
+| `.minOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `min_over_time()` <br>Usage: `.minOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.max_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the maximum value of all points in the specified interval. <br>Usage: `.max_over_time('5m')` |
+| `.max_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `max_over_time()` <br>Usage: `.max_over_time_by('5m', ['region', 'cluster'])` |
+| `.max_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `max_over_time()` <br>Usage: `.max_over_time_without('5m', ['region', 'cluster'])` |
+| `.maxOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `max_over_time()` <br>Usage: `.maxOverTime('5m')` |
+| `.maxOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `max_over_time()` <br>Usage: `.maxOverTimeBy('5m', ['region', 'cluster'])` |
+| `.maxOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `max_over_time()` <br>Usage: `.maxOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.first_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the first value of all points in the specified interval <br>Usage: `.first_over_time('5m')` |
+| `.first_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `first_over_time()` <br>Usage: `.first_over_time_by('5m', ['region', 'cluster'])` |
+| `.first_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `first_over_time()` <br>Usage: `.first_over_time_without('5m', ['region', 'cluster'])` |
+| `.firstOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `first_over_time()` <br>Usage: `.firstOverTime('5m')` |
+| `.firstOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `first_over_time()` <br>Usage: `.firstOverTimeBy('5m', ['region', 'cluster'])` |
+| `.firstOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `first_over_time()` <br>Usage: `.firstOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.last_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the last value of all points in the specified interval <br>Usage: `.last_over_time('5m')` |
+| `.last_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `last_over_time()` <br>Usage: `.last_over_time_by('5m', ['region', 'cluster'])` |
+| `.last_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `last_over_time()` <br>Usage: `.last_over_time_without('5m', ['region', 'cluster'])` |
+| `.lastOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `last_over_time()` <br>Usage: `.lastOverTime('5m')` |
+| `.lastOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `last_over_time()` <br>Usage: `.lastOverTimeBy('5m', ['region', 'cluster'])` |
+| `.lastOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `last_over_time()` <br>Usage: `.lastOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.rate_counter(interval, resolution?, offset?)` | Calculates per second rate of the values in the specified interval and treating them as "counter metric" <br>Usage: `.rate_counter('5m')` |
+| `.rateCounter(interval, resolution?, offset?)` | c <br>Usage: `.rate_counter('5m')` |
+| `.stdvar_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the population standard variance of the values in the specified interval. <br>Usage: `.stdvar_over_time('5m', ['region', 'cluster'])` |
 Wrapper for `stdvar_over_time()` |
-| `.stdvar_over_time_without(interval, without, resolution?, offset?)` | `.stdvar_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
-| `.stdvarOverTime(interval, resolution?, offset?, by?, without?)` | `.stdvarOverTime('5m')` | Wrapper for `stdvar_over_time()` |
-| `.stdvarOverTimeBy(interval, by, resolution?, offset?)` | `.stdvarOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
-| `.stdvarOverTimeWithout(interval, without, resolution?, offset?)` | `.stdvarOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `stdvar_over_time()` |
-| `.stddev_over_time(interval, resolution?, offset?, by?, without?)` | `.stddev_over_time('5m')` | Calculates the population standard deviation of the values in the specified interval. |
-| `.stddev_over_time_by(interval, by, resolution?, offset?)` | `.stddev_over_time_by('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
-| `.stddev_over_time_without(interval, without, resolution?, offset?)` | `.stddev_over_time_without('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
-| `.stddevOverTime(interval, resolution?, offset?, by?, without?)` | `.stddevOverTime('5m')` | Wrapper for `stddev_over_time()` |
-| `.stddevOverTimeBy(interval, by, resolution?, offset?)` | `.stddevOverTimeBy('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
-| `.stddevOverTimeWithout(interval, without, resolution?, offset?)` | `.stddevOverTimeWithout('5m', ['region', 'cluster'])` | Wrapper for `stddev_over_time()` |
-| `.quantile_over_time(quantile, interval, resolution?, offset?, by?, without?)` | `.quantile_over_time('0.95', '5m')` | Calculates the φ-quantile (0 ≤ φ ≤ 1) of the values in the specified interval. |
-| `.quantile_over_time_by(quantile, interval, by, resolution?, offset?)` | `.quantile_over_time_by('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
-| `.quantile_over_time_without(quantile, interval, without, resolution?, offset?)` | `.quantile_over_time_without('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
-| `.quantileOverTime(quantile, interval, resolution?, offset?, by?, without?)` | `.quantileOverTime('0.95', '5m')` | Wrapper for `quantile_over_time()` |
-| `.quantileOverTimeBy(quantile, interval, by, resolution?, offset?)` | `.quantileOverTimeBy('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
-| `.quantileOverTimeWithout(quantile, interval, without, resolution?, offset?)` | `.quantileOverTimeWithout('0.95', '5m', ['region', 'cluster'])` | Wrapper for `quantile_over_time()` |
+| `.stdvar_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `stdvar_over_time()` <br>Usage: `.stdvar_over_time_without('5m', ['region', 'cluster'])` |
+| `.stdvarOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `stdvar_over_time()` <br>Usage: `.stdvarOverTime('5m')` |
+| `.stdvarOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `stdvar_over_time()` <br>Usage: `.stdvarOverTimeBy('5m', ['region', 'cluster'])` |
+| `.stdvarOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `stdvar_over_time()` <br>Usage: `.stdvarOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.stddev_over_time(interval, resolution?, offset?, by?, without?)` | Calculates the population standard deviation of the values in the specified interval. <br>Usage: `.stddev_over_time('5m')` |
+| `.stddev_over_time_by(interval, by, resolution?, offset?)` | Wrapper for `stddev_over_time()` <br>Usage: `.stddev_over_time_by('5m', ['region', 'cluster'])` |
+| `.stddev_over_time_without(interval, without, resolution?, offset?)` | Wrapper for `stddev_over_time()` <br>Usage: `.stddev_over_time_without('5m', ['region', 'cluster'])` |
+| `.stddevOverTime(interval, resolution?, offset?, by?, without?)` | Wrapper for `stddev_over_time()` <br>Usage: `.stddevOverTime('5m')` |
+| `.stddevOverTimeBy(interval, by, resolution?, offset?)` | Wrapper for `stddev_over_time()` <br>Usage: `.stddevOverTimeBy('5m', ['region', 'cluster'])` |
+| `.stddevOverTimeWithout(interval, without, resolution?, offset?)` | Wrapper for `stddev_over_time()` <br>Usage: `.stddevOverTimeWithout('5m', ['region', 'cluster'])` |
+| `.quantile_over_time(quantile, interval, resolution?, offset?, by?, without?)` | Calculates the φ-quantile (0 ≤ φ ≤ 1) of the values in the specified interval. <br>Usage: `.quantile_over_time('0.95', '5m')` |
+| `.quantile_over_time_by(quantile, interval, by, resolution?, offset?)` | Wrapper for `quantile_over_time()` <br>Usage: `.quantile_over_time_by('0.95', '5m', ['region', 'cluster'])` |
+| `.quantile_over_time_without(quantile, interval, without, resolution?, offset?)` | Wrapper for `quantile_over_time()` <br>Usage: `.quantile_over_time_without('0.95', '5m', ['region', 'cluster'])` |
+| `.quantileOverTime(quantile, interval, resolution?, offset?, by?, without?)` | Wrapper for `quantile_over_time()` <br>Usage: `.quantileOverTime('0.95', '5m')` |
+| `.quantileOverTimeBy(quantile, interval, by, resolution?, offset?)` | Wrapper for `quantile_over_time()` <br>Usage: `.quantileOverTimeBy('0.95', '5m', ['region', 'cluster'])` |
+| `.quantileOverTimeWithout(quantile, interval, without, resolution?, offset?)` | Wrapper for `quantile_over_time()` <br>Usage: `.quantileOverTimeWithout('0.95', '5m', ['region', 'cluster'])` |
 
 #### Example Unwrapped Range Aggregation Usage
 
@@ -403,66 +402,66 @@ avg_over_time(
 
 [LogQL Formatting Documentation](https://grafana.com/docs/loki/latest/query/metric_queries/#built-in-aggregation-operators)
 
-| Function / Operation | Sample Usage | Description |
-| :---------------- | :----------- | :----------- |
-| `.sum(by?, without?)` |  `.sum()` | Calculate sum over labels |
-| `.sum_by(by)` |  `.sumBy(['cluster', 'region'])` | Wrapper for `sum(by=[])` |
-| `.sumBy(by)` |  `.sumBy(['cluster', 'region'])` | Wrapper for `sum(by=[])` |
-| `.sum_without(without)` |  `.sumWithout(['cluster', 'region')` | Wrapper for `sum(without=[])` |
-| `.sumWithout(without)` |  `.sumWithout(['cluster', 'region')` | Wrapper for `sum(without=[])` |
-| `.avg(by?, without?)` |  `.avg()` | Calculate the average over labels |
-| `.avg_by(by)` |  `.avgBy(['cluster', 'region')` | Wrapper for `avg(by=[])` |
-| `.avgBy(by)` |  `.avgBy(['cluster', 'region')` | Wrapper for `avg(by=[])` |
-| `.avg_without(without)` |  `.avgWithout(['cluster', 'region')` | Wrapper for `avg(without=[])` |
-| `.avgWithout(without)` |  `.avgWithout(['cluster', 'region')` | Wrapper for `avg(without=[])` |
-| `.min(by?, without?)` |  `.min()` |  Select minimum over labels |
-| `.min_by(by)` |  `.minBy(['cluster', 'region')` | Wrapper for `min(by=[])` |
-| `.minBy(by)` |  `.minBy(['cluster', 'region')` | Wrapper for `min(by=[])` |
-| `.min_without(without)` |  `.minWithout(['cluster', 'region')` | Wrapper for `min(without=[])` |
-| `.minWithout(without)` |  `.minWithout(['cluster', 'region')` | Wrapper for `min(without=[])` |
-| `.max(by?, without?)` |  `.max()` | Select maximum over labels |
-| `.max_by(by)` |  `.maxBy(['cluster', 'region')` | Wrapper for `max(by=[])` |
-| `.maxBy(by)` |  `.maxBy(['cluster', 'region')` | Wrapper for `max(by=[])` |
-| `.max_without(without)` |  `.maxWithout(['cluster', 'region')` | Wrapper for `max(without=[])` |
-| `.maxWithout(without)` |  `.maxWithout(['cluster', 'region')` | Wrapper for `max(without=[])` |
-| `.stddev(by?, without?)` |  `.stddev()` | Calculate the population standard deviation over labels |
-| `.stddev_by(by)` |  `.stddevBy(['cluster', 'region')` | Wrapper for `stddev(by=[])` |
-| `.stddevBy(by)` |  `.stddevBy(['cluster', 'region')` | Wrapper for `stddev(by=[])` |
-| `.stddev_without(without)` |  `.stddevWithout(['cluster', 'region')` | Wrapper for `stddev(without=[])` |
-| `.stddevWithout(without)` |  `.stddevWithout(['cluster', 'region')` | Wrapper for `stddev(without=[])` |
-| `.stdvar(by?, without?)` |  `.stdvar()` | Calculate the population standard variance over labels |
-| `.stdvar_by(by)` |  `.stdvarBy(['cluster', 'region')` | Wrapper for `stdvar(by=[])` |
-| `.stdvarBy(by)` |  `.stdvarBy(['cluster', 'region')` | Wrapper for `stdvar(by=[])` |
-| `.stdvar_without(without)` |  `.stdvarWithout(['cluster', 'region')` | Wrapper for `stdvar(without=[])` |
-| `.stdvarWithout(without)` |  `.stdvarWithout(['cluster', 'region')` | Wrapper for `stdvar(without=[])` |
-| `.count(by?, without?)` |  `.count()` | Count number of elements in the vector |
-| `.count_by(by)` |  `.countBy(['cluster', 'region')` | Wrapper for `count(by=[])` |
-| `.countBy(by)` |  `.countBy(['cluster', 'region')` | Wrapper for `count(by=[])` |
-| `.count_without(without)` |  `.countWithout(['cluster', 'region')` | Wrapper for `count(without=[])` |
-| `.countWithout(without)` |  `.countWithout(['cluster', 'region')` | Wrapper for `count(without=[])` |
-| `.topk(k, by?, without?)` |  `.topk(10)` | Select largest k elements by sample value |
-| `.topk_by(k, by)` |  `.topk_by(10, ['region'])` | Wrapper for `.topk(k, by=[])` |
-| `.topkBy(k, by)` |  `.topkBy(10, ['region'])` | Wrapper for `.topk(k, by=[])` |
-| `.topk_without(k, without)` |  `.topk_without(10, ['region'])` | Wrapper for `.topk(k, without=[])` |
-| `.topkWithout(k, without)` |  `.topkWithout(10, ['region'])` | Wrapper for `.topk(k, without=[])` |
-| `.bottomk(k, by?, without?)` |  `.bottomk(10)` | Select smallest k elements by sample value |
-| `.bottomk_by(k, by)` |  `.bottomk_by(10, ['region'])` | Wrapper for `.bottomk(k, by=[])` |
-| `.bottomkBy(k, by)` |  `.bottomkBy(10, ['region'])` | Wrapper for `.bottomk(k, by=[])` |
-| `.bottomk_without(k, without)` |  `.bottomk_without(10, ['region'])` | Wrapper for `.bottomk(k, without=[])` |
-| `.bottomkWithout(k, without)` |  `.bottomkWithout(10, ['region'])` | Wrapper for `.bottomk(k, without=[])` |
-| `.sort(by?, without?)` |  `.sort()` | returns vector elements sorted by their sample values, in ascending order. |
-| `.sort_by(by)` |  `.sort_by(['region', 'cluster'])` | Wrapper for `.sort(by=[])` |
-| `.sortBy(by)` |  `.sortBy(['region', 'cluster'])` |  Wrapper for `.sort(by=[])` |
-| `.sort_without(without)` |  `.sort_without(['region', 'cluster'])` | `.sort(without=[])` |
-| `.sortWithout(without)` |  `.sortWithout(['region', 'cluster'])` | `.sort(without=[])` |
-| `.sort_desc(by?, without?)` |  `.sort_desc()` | Same as sort, but sorts in descending order. |
-| `.sortDesc(by?, without?)` |  `.sortDesc()` | Wrapper for `.sort_desc()` |
-| `.sort_desc_by(by)` |  `.sort_desc_by(['region', 'cluster'])` | Wrapper for `.sort_desc(by=[])` |
-| `.sortDescBy(by)` |  `sortDescBy(['region', 'cluster'])` | Wrapper for `.sort_desc(by=[])` |
-| `.sort_desc_without(without)` |  `.sort_desc_without(['region', 'cluster'])` | Wrapper for `.sort_desc(without=[])` |
-| `.sortDescWithout(without)` |  `.sortDescWithout(['region', 'cluster'])` | Wrapper for `.sort_desc(without=[])` |
+| Operation | Description |
+| :---------------- | :----------- |
+| `.sum(by?, without?)` | Calculate sum over labels <br>Usage:  `.sum()` |
+| `.sum_by(by)` | Wrapper for `sum(by=[])` <br>Usage:  `.sumBy(['cluster', 'region'])` |
+| `.sumBy(by)` | Wrapper for `sum(by=[])` <br>Usage:  `.sumBy(['cluster', 'region'])` |
+| `.sum_without(without)` | Wrapper for `sum(without=[])` <br>Usage:  `.sumWithout(['cluster', 'region')` |
+| `.sumWithout(without)` | Wrapper for `sum(without=[])` <br>Usage:  `.sumWithout(['cluster', 'region')` |
+| `.avg(by?, without?)` | Calculate the average over labels <br>Usage:  `.avg()` |
+| `.avg_by(by)` | Wrapper for `avg(by=[])` <br>Usage:  `.avgBy(['cluster', 'region')` |
+| `.avgBy(by)` | Wrapper for `avg(by=[])` <br>Usage:  `.avgBy(['cluster', 'region')` |
+| `.avg_without(without)` | Wrapper for `avg(without=[])` <br>Usage:  `.avgWithout(['cluster', 'region')` |
+| `.avgWithout(without)` | Wrapper for `avg(without=[])` <br>Usage:  `.avgWithout(['cluster', 'region')` |
+| `.min(by?, without?)` |  Select minimum over labels <br>Usage:  `.min()` |
+| `.min_by(by)` | Wrapper for `min(by=[])` <br>Usage:  `.minBy(['cluster', 'region')` |
+| `.minBy(by)` | Wrapper for `min(by=[])` <br>Usage:  `.minBy(['cluster', 'region')` |
+| `.min_without(without)` | Wrapper for `min(without=[])` <br>Usage:  `.minWithout(['cluster', 'region')` |
+| `.minWithout(without)` | Wrapper for `min(without=[])` <br>Usage:  `.minWithout(['cluster', 'region')` |
+| `.max(by?, without?)` | Select maximum over labels <br>Usage:  `.max()` |
+| `.max_by(by)` | Wrapper for `max(by=[])` <br>Usage:  `.maxBy(['cluster', 'region')` |
+| `.maxBy(by)` | Wrapper for `max(by=[])` <br>Usage:  `.maxBy(['cluster', 'region')` |
+| `.max_without(without)` | Wrapper for `max(without=[])` <br>Usage:  `.maxWithout(['cluster', 'region')` |
+| `.maxWithout(without)` | Wrapper for `max(without=[])` <br>Usage:  `.maxWithout(['cluster', 'region')` |
+| `.stddev(by?, without?)` | Calculate the population standard deviation over labels <br>Usage:  `.stddev()` |
+| `.stddev_by(by)` | Wrapper for `stddev(by=[])` <br>Usage:  `.stddevBy(['cluster', 'region')` |
+| `.stddevBy(by)` | Wrapper for `stddev(by=[])` <br>Usage:  `.stddevBy(['cluster', 'region')` |
+| `.stddev_without(without)` | Wrapper for `stddev(without=[])` <br>Usage:  `.stddevWithout(['cluster', 'region')` |
+| `.stddevWithout(without)` | Wrapper for `stddev(without=[])` <br>Usage:  `.stddevWithout(['cluster', 'region')` |
+| `.stdvar(by?, without?)` | Calculate the population standard variance over labels <br>Usage:  `.stdvar()` |
+| `.stdvar_by(by)` | Wrapper for `stdvar(by=[])` <br>Usage:  `.stdvarBy(['cluster', 'region')` |
+| `.stdvarBy(by)` | Wrapper for `stdvar(by=[])` <br>Usage:  `.stdvarBy(['cluster', 'region')` |
+| `.stdvar_without(without)` | Wrapper for `stdvar(without=[])` <br>Usage:  `.stdvarWithout(['cluster', 'region')` |
+| `.stdvarWithout(without)` | Wrapper for `stdvar(without=[])` <br>Usage:  `.stdvarWithout(['cluster', 'region')` |
+| `.count(by?, without?)` | Count number of elements in the vector <br>Usage:  `.count()` |
+| `.count_by(by)` | Wrapper for `count(by=[])` <br>Usage:  `.countBy(['cluster', 'region')` |
+| `.countBy(by)` | Wrapper for `count(by=[])` <br>Usage:  `.countBy(['cluster', 'region')` |
+| `.count_without(without)` | Wrapper for `count(without=[])` <br>Usage:  `.countWithout(['cluster', 'region')` |
+| `.countWithout(without)` | Wrapper for `count(without=[])` <br>Usage:  `.countWithout(['cluster', 'region')` |
+| `.topk(k, by?, without?)` | Select largest k elements by sample value <br>Usage:  `.topk(10)` |
+| `.topk_by(k, by)` | Wrapper for `.topk(k, by=[])` <br>Usage:  `.topk_by(10, ['region'])` |
+| `.topkBy(k, by)` | Wrapper for `.topk(k, by=[])` <br>Usage:  `.topkBy(10, ['region'])` |
+| `.topk_without(k, without)` | Wrapper for `.topk(k, without=[])` <br>Usage:  `.topk_without(10, ['region'])` |
+| `.topkWithout(k, without)` | Wrapper for `.topk(k, without=[])` <br>Usage:  `.topkWithout(10, ['region'])` |
+| `.bottomk(k, by?, without?)` | Select smallest k elements by sample value <br>Usage:  `.bottomk(10)` |
+| `.bottomk_by(k, by)` | Wrapper for `.bottomk(k, by=[])` <br>Usage:  `.bottomk_by(10, ['region'])` |
+| `.bottomkBy(k, by)` | Wrapper for `.bottomk(k, by=[])` <br>Usage:  `.bottomkBy(10, ['region'])` |
+| `.bottomk_without(k, without)` | Wrapper for `.bottomk(k, without=[])` <br>Usage:  `.bottomk_without(10, ['region'])` |
+| `.bottomkWithout(k, without)` | Wrapper for `.bottomk(k, without=[])` <br>Usage:  `.bottomkWithout(10, ['region'])` |
+| `.sort(by?, without?)` | returns vector elements sorted by their sample values, in ascending order. <br>Usage:  `.sort()` |
+| `.sort_by(by)` | Wrapper for `.sort(by=[])` <br>Usage:  `.sort_by(['region', 'cluster'])` |
+| `.sortBy(by)` |  Wrapper for `.sort(by=[])` <br>Usage:  `.sortBy(['region', 'cluster'])` |
+| `.sort_without(without)` | `.sort(without=[])` <br>Usage:  `.sort_without(['region', 'cluster'])` |
+| `.sortWithout(without)` | `.sort(without=[])` <br>Usage:  `.sortWithout(['region', 'cluster'])` |
+| `.sort_desc(by?, without?)` | Same as sort, but sorts in descending order. <br>Usage:  `.sort_desc()` |
+| `.sortDesc(by?, without?)` | Wrapper for `.sort_desc()` <br>Usage:  `.sortDesc()` |
+| `.sort_desc_by(by)` | Wrapper for `.sort_desc(by=[])` <br>Usage:  `.sort_desc_by(['region', 'cluster'])` |
+| `.sortDescBy(by)` | Wrapper for `.sort_desc(by=[])` <br>Usage:  `sortDescBy(['region', 'cluster'])` |
+| `.sort_desc_without(without)` | Wrapper for `.sort_desc(without=[])` <br>Usage:  `.sort_desc_without(['region', 'cluster'])` |
+| `.sortDescWithout(without)` | Wrapper for `.sort_desc(without=[])` <br>Usage:  `.sortDescWithout(['region', 'cluster'])` |
 
-#### Example Unwrapped Range Aggregation Usage
+#### Example Aggregations Usage
 
 ```js
 logql.new()
