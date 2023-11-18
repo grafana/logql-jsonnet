@@ -29,14 +29,14 @@ logql.new()
 {app="ecommerce", cluster="primary", region="us-east-1"}
 ```
 
-To support a more fluent api, a single method of `label()` is provided that returns an object of methods to chain from.
+To support a more fluent api, a single method of `selector()` is provided that returns an object of methods to chain from.
 
 | Function / Operation | Sample Usage | Description |
 | :---------------- | :----------- | :----------- |
-| `.eq(value)` | `.label('region').eq('us-east-1')` | Generates a single label equality label selector |
-| `.neq(value)` | `.label('region').neq('us-east-1')` | Generates a single label not equal label selector |
-| `.re(value)` | `.label('region').re('us-east-1')` | Generates a single label regex matches label selector |
-| `.nre(value)` | `.label('region').nre('us-east-1')` | Generates a single label not regex matches label selector |
+| `.eq(value)` | `.selector('region').eq('us-east-1')` | Generates a single label equality label selector |
+| `.neq(value)` | `.selector('region').neq('us-east-1')` | Generates a single label not equal label selector |
+| `.re(value)` | `.selector('region').re('us-east-1')` | Generates a single label regex matches label selector |
+| `.nre(value)` | `.selector('region').nre('us-east-1')` | Generates a single label not regex matches label selector |
 
 #### Example Stream Selector Fluent Usage
 
