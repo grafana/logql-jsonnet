@@ -73,7 +73,6 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
 );
 
 {
-  local root = self,
   new():: {
     local it = self,
     _query:: '',

@@ -1,6 +1,9 @@
 # logql-jsonnet
 
-A [Jsonnet](https://jsonnet.org/) based DSL for writing [LogQL](https://grafana.com/docs/loki/latest/query/) queries, inspired by [promql-jsonnet](https://github.com/satyanash/promql-jsonnet/tree/master). This is useful when creating grafana dashboards using [grafonnet](https://grafana.github.io/grafonnet/index.html). Instead of having to template strings manually, you can now use immutable builders to DRY out your LogQL queries.
+A [Jsonnet](https://jsonnet.org/) based DSL for writing [LogQL](https://grafana.com/docs/loki/latest/query/) queries, inspired by
+[promql-jsonnet](https://github.com/satyanash/promql-jsonnet/tree/master). This is useful when creating Grafana dashboards using
+[grafonnet](https://grafana.github.io/grafonnet/index.html). Instead of having to template strings manually, you can now use
+immutable builders to DRY out your LogQL queries.
 
 ## API Reference and LogQL Support
 
@@ -29,14 +32,14 @@ logql.new()
 {app="ecommerce", cluster="primary", region="us-east-1"}
 ```
 
-To support a more fluent api, a single method of `selector()` is provided that returns an object of methods to chain from.
+To support a more fluent API, a single method of `selector()` is provided that returns an object of methods to chain from.
 
 | Operation | Description |
 | :---------------- | :----------- |
 | `.eq(value)` | Generates a single label equality label selector <br>Usage: `.selector('region').eq('us-east-1')` |
 | `.neq(value)` | Generates a single label not equal label selector <br>Usage: `.selector('region').neq('us-east-1')` |
-| `.re(value)` | Generates a single label regex matches label selector <br>Usage: `.selector('region').re('us-east-1')` |
-| `.nre(value)` | Generates a single label not regex matches label selector <br>Usage: `.selector('region').nre('us-east-1')` |
+| `.re(value)` | Generates a single label regular expression matches label selector <br>Usage: `.selector('region').re('us-east-1')` |
+| `.nre(value)` | Generates a single label not regular expression matches label selector <br>Usage: `.selector('region').nre('us-east-1')` |
 
 #### Example Stream Selector Fluent Usage
 
@@ -82,7 +85,7 @@ logql.new()
 |= `error`
 ```
 
-To support a more fluent api, a single method of `line()` is provided that returns an object of methods to chain from.
+To support a more fluent API, a single method of `line()` is provided that returns an object of methods to chain from.
 
 | Operation | Description |
 | :---------------- | :----------- |
@@ -171,7 +174,7 @@ logql.new()
 | status_code != 200
 ```
 
-To support a more fluent api, a single method of `label(label)` is provided that returns an object of methods to chain from.
+To support a more fluent API, a single method of `label(label)` is provided that returns an object of methods to chain from.
 
 | Operation | Description |
 | :---------------- | :----------- |

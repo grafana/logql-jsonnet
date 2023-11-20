@@ -1,5 +1,3 @@
-local logql = import 'logql.libsonnet';
-
 local aggregations = import 'aggregations/main.libsonnet';
 local bytes = import 'bytes.libsonnet';
 local durations = import 'durations.libsonnet';
