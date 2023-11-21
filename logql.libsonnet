@@ -16,13 +16,13 @@ local findPreviousStatementIndex(currentStatement, statements) = (
 // checks to see if an input string is a duration
 local isDuration(str) =
   if std.endsWith(str, 'ns')
-    || std.endsWith(str, 'us')
-    || std.endsWith(str, 'µs')
-    || std.endsWith(str, 'ms')
-    || std.endsWith(str, 's')
-    || std.endsWith(str, 'm')
-    || std.endsWith(str, 'h')
-    || std.endsWith(str, 'd')
+     || std.endsWith(str, 'us')
+     || std.endsWith(str, 'µs')
+     || std.endsWith(str, 'ms')
+     || std.endsWith(str, 's')
+     || std.endsWith(str, 'm')
+     || std.endsWith(str, 'h')
+     || std.endsWith(str, 'd')
   then
     true
   else
@@ -32,18 +32,18 @@ local isDuration(str) =
 local isBytes(str) =
   local lowered_str = std.asciiLower(str);
   if std.endsWith(lowered_str, 'b')
-    || std.endsWith(lowered_str, 'kib')
-    || std.endsWith(lowered_str, 'kb')
-    || std.endsWith(lowered_str, 'mib')
-    || std.endsWith(lowered_str, 'mb')
-    || std.endsWith(lowered_str, 'gib')
-    || std.endsWith(lowered_str, 'gb')
-    || std.endsWith(lowered_str, 'tib')
-    || std.endsWith(lowered_str, 'tb')
-    || std.endsWith(lowered_str, 'pib')
-    || std.endsWith(lowered_str, 'pb')
-    || std.endsWith(lowered_str, 'eib')
-    || std.endsWith(lowered_str, 'eb')
+     || std.endsWith(lowered_str, 'kib')
+     || std.endsWith(lowered_str, 'kb')
+     || std.endsWith(lowered_str, 'mib')
+     || std.endsWith(lowered_str, 'mb')
+     || std.endsWith(lowered_str, 'gib')
+     || std.endsWith(lowered_str, 'gb')
+     || std.endsWith(lowered_str, 'tib')
+     || std.endsWith(lowered_str, 'tb')
+     || std.endsWith(lowered_str, 'pib')
+     || std.endsWith(lowered_str, 'pb')
+     || std.endsWith(lowered_str, 'eib')
+     || std.endsWith(lowered_str, 'eb')
   then
     true
   else
@@ -51,7 +51,7 @@ local isBytes(str) =
 
 local range(interval, resolution) = (
   // check to see if the passed interval contains the resolution already i.e. 1h:1m, also strip out any accidental spaces, [, or ]
-  local iList = std.split(std.stripChars(std.strReplace(std.strReplace(interval, '[', ''), ']', ''), " "), ':');
+  local iList = std.split(std.stripChars(std.strReplace(std.strReplace(interval, '[', ''), ']', ''), ' '), ':');
   local i = if std.length(iList) == 2 then iList[0] else interval;
   local r = if std.length(iList) == 2 then iList[1] else resolution;
   if r == null then
@@ -78,7 +78,7 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
     _query:: '',
     _labels:: [],
     _funcs:: [],
-    _statements:: [], // holds the statements added, as we might need to reference the previous command to know what to do
+    _statements:: [],  // holds the statements added, as we might need to reference the previous command to know what to do
 
     // selectors
     selector(label):: {
@@ -95,7 +95,7 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
 
     withLabels(labels):: self {
       _statements+:: [{ type: 'withLabels', args: [labels] }],
-      _labels+:: [{ label: k, op: "=", value: labels[k] } for k in std.objectFields(labels)],
+      _labels+:: [{ label: k, op: '=', value: labels[k] } for k in std.objectFields(labels)],
     },
 
     withLabel(label, op='=', value=null):: self {
@@ -111,7 +111,7 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
 
     _labelExpr()::
       if self._labels == [] then
-        ""
+        ''
       else
         std.format('{%s}', std.join(', ', [std.format('%s%s"%s"', [label.label, label.op, label.value]) for label in self._labels])),
 
@@ -161,10 +161,10 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
         std.toString(value),
       _statements+:: [{ type: 'labelFilter', args: [operator, label, value] }],
       _query+:: pipe +
-        if operator == '' then
-          std.format('%s', [label])
-        else
-          std.format('%s %s %s', [label, operator, formatted]),
+                if operator == '' then
+                  std.format('%s', [label])
+                else
+                  std.format('%s %s %s', [label, operator, formatted]),
     },
     labelNoop(label):: self._labelFilter('', label, ''),
     labelEq(label, value):: self._labelFilter('==', label, value),
@@ -202,7 +202,7 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
           if (std.length(exprs) > 1 && operator == 'and') then
             std.format(' %s ', operator)
           else
-          ''
+            ''
       else
         pipe,
       local formattedExprs = std.strReplace(std.join(' %s ' % operator, [if std.isString(expr) then expr else std.toString(expr) for expr in exprs]), stripNewLines(pipe), ' '),
@@ -349,7 +349,7 @@ local stringToList(input, delimiter=',', stripSpaces=true) = (
         if std.length(std.findSubstr('(', func)) > 0 then
           [func + ', %s)' + aggBy + aggWithout]
         else
-          [func + aggBy + aggWithout + '(%s)']
+          [func + aggBy + aggWithout + '(%s)'],
     },
     sum(by=[], without=[]):: self._agg('sum', by, without),
     sum_by(by):: self.sum(by=by),

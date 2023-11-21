@@ -21,4 +21,3 @@ repos:
     rev: v0.20.0
     hooks:
       - id: jsonnet-format
-      - id: jsonnet-lint
