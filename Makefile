@@ -2,7 +2,7 @@
 PATH := ./node_modules/.bin:$(PATH)
 SHELL := /bin/bash
 args = $(filter-out $@, $(MAKECMDGOALS))
-.PHONY: all setup install clean reinstall lint lint-sh lint-shell lint-md lint-markdown lint-txt lint-text lint-yaml lint-yml lint-editorconfig lint-ec lint-jsonnet ci-lint ci-lint-shell ci-lint-markdown ci-lint-text ci-lint-yaml ci-lint-editorconfig tests ci-tests
+.PHONY: all setup install clean reinstall lint lint-sh lint-shell lint-md lint-markdown lint-txt lint-text lint-yaml lint-yml lint-editorconfig lint-ec lint-jsonnet ci-lint ci-lint-shell ci-lint-markdown ci-lint-text ci-lint-yaml ci-lint-editorconfig tests ci-tests ci ci-install
 
 default: all
 
@@ -67,7 +67,13 @@ tests:
 ####################################################################
 #                              CI                                  #
 ####################################################################
-ci-lint: ci-lint-shell ci-lint-markdown ci-lint-text ci-lint-yaml ci-lint-editorconfig
+ci: ci-install ci-lint ci-tests
+
+ci-install:
+	yarn install
+	pipenv install
+
+ci-lint: ci-lint-shell ci-lint-markdown ci-lint-text ci-lint-yaml ci-lint-editorconfig ci-lint-jsonnet
 
 # Shell Linting
 ci-lint-shell:

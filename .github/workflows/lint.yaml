@@ -35,7 +35,6 @@ jobs:
         run: |
           go install github.com/google/go-jsonnet/cmd/jsonnet@latest
           go install github.com/google/go-jsonnet/cmd/jsonnet-lint@latest
-          go install -a github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
 
       - uses: actions/setup-python@v4
         with:
@@ -46,7 +45,7 @@ jobs:
           python -m pip install --upgrade pipenv wheel
 
       - name: Install dependencies
-        run: make install
+        run: make ci-install
 
       - name: Shell Linting
         run: make ci-lint-shell
