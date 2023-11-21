@@ -1,5 +1,30 @@
 # logql-jsonnet
 
+<!-- markdownlint-disable MD033 -->
+<p align="center">
+  <a href="https://grafana.com/products/cloud/logs/">
+    <img height="20" src="https://img.shields.io/badge/grafana-loki-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana Loki" />
+  </a>
+  <a href="http://jsonnet.org">
+    <img src="https://img.shields.io/badge/jsonnet--lib-logql-blue" alt="jsonnet library: logql">
+  </a>
+  <a href="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml">
+    <img height="20" src="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml/badge.svg" alt="Lint" />
+  </a>
+  <a href="https://github.com/bentonam/logql-jsonnet/commits/main">
+    <img alt="GitHub last commit (branch)" src="https://img.shields.io/github/last-commit/bentonam/logql-jsonnet/main">
+  </a>
+  <a href="https://raw.githubusercontent.com/bentonam/logql-jsonnet/main/LICENSE" alt="Contributors">
+    <img src="https://img.shields.io/github/license/bentonam/logql-jsonnet">
+  </a>
+  <a href="https://github.com/bentonam/logql-jsonnet/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/bentonam/logql-jsonnet" />
+  </a>
+  <a href="https://github.com/bentonam/logql-jsonnet/releases">
+    <img alt="GitHub release" src="https://img.shields.io/github/v/release/bentonam/logql-jsonnet">
+  </a>
+</p>
+
 A [Jsonnet](https://jsonnet.org/) based DSL for writing [LogQL](https://grafana.com/docs/loki/latest/query/) queries, inspired by
 [promql-jsonnet](https://github.com/satyanash/promql-jsonnet/tree/master). This is useful when creating Grafana dashboards using
 [grafonnet](https://grafana.github.io/grafonnet/index.html). Instead of having to template strings manually, you can now use
