@@ -11,6 +11,9 @@
   <a href="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml">
     <img height="20" src="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml/badge.svg" alt="Lint">
   </a>
+  <a href="https://github.com/bentonam/logql-jsonnet/actions/workflows/unit-tests.yaml">
+    <img height="20" src="https://github.com/bentonam/logql-jsonnet/actions/workflows/unit-tests.yaml/badge.svg" alt="Unit Tests">
+  </a>
   <a href="https://github.com/bentonam/logql-jsonnet/commits/main">
     <img alt="GitHub last commit (branch)" src="https://img.shields.io/github/last-commit/bentonam/logql-jsonnet/main">
   </a>
