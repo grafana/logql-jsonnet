@@ -17,6 +17,7 @@ setup:
 install:
 	yarn install
 	pipenv install
+	pre-commit install
 
 # remove the build and log folders
 clean:

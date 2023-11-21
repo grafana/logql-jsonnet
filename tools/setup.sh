@@ -71,3 +71,11 @@ if [[ "$(command -v shellcheck)" = "" ]]; then
 else
   success "shellcheck is installed"
 fi
+
+# make sure pre-commit exists
+info "Checking to see if shellcheck is installed"
+if [[ "$(command -v pre-commit)" = "" ]]; then
+  warning "pre-commit is required, see: (https://pre-commit.com) or run: brew install pre-commit";
+else
+  success "pre-commit is installed"
+fi

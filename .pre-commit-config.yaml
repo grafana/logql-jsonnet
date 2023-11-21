@@ -1,0 +1,24 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: pretty-format-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-shebang-scripts-are-executable
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+    name: pretty format json
+    description: sets a standard for formatting json files.
+    entry: pretty-format-json
+    language: python
+    types: [json]
+  - repo: https://github.com/google/go-jsonnet
+    rev: v0.20.0
+    hooks:
+      - id: jsonnet-format
+      - id: jsonnet-lint
