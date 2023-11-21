@@ -40,3 +40,8 @@ indent_style = tab
 [*.py]
 indent_style = space
 indent_size = 4
+
+# Jsonnet Files
+[*.{jsonnet,libsonnet}]
+indent_style = space
+indent_size = ignore
