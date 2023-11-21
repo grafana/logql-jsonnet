@@ -6,7 +6,7 @@
     <img height="20" src="https://img.shields.io/badge/grafana-loki-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white" alt="Grafana Loki">
   </a>
   <a href="http://jsonnet.org">
-    <img src="https://img.shields.io/badge/jsonnet--lib-logql-blue" alt="jsonnet library: logql">
+    <img src="https://img.shields.io/badge/jsonnet-logql-blue.svg?logo=data:image/svg%2bxml;base64,PHN2ZyBoZWlnaHQ9IjUxMiIgd2lkdGg9IjUxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJtMzA1LjA0Mzc5MjcgMzAzLjIxMjc5OTEtOTAuNzYzNjI2MS00NS4zODE3NzQ5IDkwLjc2MzY4NzEtNDUuMzgxODY2NSA5MC43NjI2OTUzIDQ1LjM4MTg2NjV6bS0xOTcuOTAzNzA5NC0yMDYuMDkyMTcwNyA5MC43NjMyNTIzIDQ1LjM4MTg0MzYgOTAuNzYzNjI2MS00NS4zODE4NDM2LTkwLjc2MzY4NzEtNDUuMzgxMzR6bTk4LjA4NzIyNjkgMTQ4Ljg1OTkxNjYgOTIuNDkyNTA3OS00Ni4yNDYyNjE2di05MC43NjMxOTEybC05Mi40OTI1MDc5IDQ2LjI0NjI2OTJ6bS0xMTQuNDY0MDY1Ni0xNDAuNjcxNDAxOS05MC43NjMyNDQ2IDQ1LjM4MTc3NDkgOTAuNzYzMjQ0NiA0NS4zODEzNDc3em0xMTQuNDY0MDY1NiAzNTQuOTUxNTY4NiA5MS42Mjc2Mzk4LTQ1LjgxMzgxMjMtOTEuNjI3NjM5OC00NC45NDg4NTI1em0yMTQuMjgwMTY2NiAwIDkyLjQ5MjUyMzItNDYuMjQ2Mjc2OXYtOTAuNzYyNjY0OGwtOTIuNDkyNTIzMiA0Ni4yNDYyNzY5em0wLTIxNC4yODAxNjY3IDkyLjQ5MjUyMzItNDYuMjQ2MjYxNnYtOTAuNzYzMTkxMmwtOTIuNDkyNTIzMiA0Ni4yNDYyNjkyem0tOTguMDg2NzAwNC0xNDguODU5OTE2NiA5MC43NjI2NjQ4IDQ1LjM4MTg0MzYgOTAuNzYzNzAyNC00NS4zODE4NDM2LTkwLjc2MzcwMjQtNDUuMzgxMzR6bTgzLjQzODYyOTEgMTcyLjU2MDk4MTctODMuNDM4NjI5MiA0MS43MTk2OTYgODMuNDM4NjI5MiA0MS43MTk3NTcxem0xNC42NDgwNzEzIDgzLjQzOTUxNDIgODMuNDM5NjY2Ny00MS43MTk4MTgxLTgzLjQzOTY2NjctNDEuNzE5ODE4MXoiLz48L3N2Zz4=" alt="jsonnet library: logql">
   </a>
   <a href="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml">
     <img height="20" src="https://github.com/bentonam/logql-jsonnet/actions/workflows/lint.yaml/badge.svg" alt="Lint">
@@ -17,14 +17,14 @@
   <a href="https://github.com/bentonam/logql-jsonnet/commits/main">
     <img alt="GitHub last commit (branch)" src="https://img.shields.io/github/last-commit/bentonam/logql-jsonnet/main">
   </a>
-  <a href="https://raw.githubusercontent.com/bentonam/logql-jsonnet/main/LICENSE" alt="Contributors">
-    <img src="https://img.shields.io/github/license/bentonam/logql-jsonnet" alt="License">
+  <a href="https://github.com/bentonam/logql-jsonnet/releases">
+    <img src="https://img.shields.io/github/v/release/bentonam/logql-jsonnet" alt="GitHub release">
   </a>
   <a href="https://github.com/bentonam/logql-jsonnet/graphs/contributors">
     <img src="https://img.shields.io/github/contributors/bentonam/logql-jsonnet" alt="Contributors">
   </a>
-  <a href="https://github.com/bentonam/logql-jsonnet/releases">
-    <img src="https://img.shields.io/github/v/release/bentonam/logql-jsonnet" alt="GitHub release">
+  <a href="https://raw.githubusercontent.com/bentonam/logql-jsonnet/main/LICENSE" alt="Contributors">
+    <img src="https://img.shields.io/github/license/bentonam/logql-jsonnet" alt="License">
   </a>
 </p>
 <!-- markdownlint-enable MD033 MD013 -->
