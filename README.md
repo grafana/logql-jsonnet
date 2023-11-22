@@ -278,6 +278,7 @@ logql.new()
 | :---------------- | :----------- |
 | `.line_format(format)` | Rewrites the log line content by using the [text/template](https://golang.org/pkg/text/template/) format <br>Usage: `.line_format('{{ .request_method }}: {{ .status_code }}')` |
 | `.lineFormat(format)` | Wrapper for `.line_format()` <br>Usage: `.lineFormat('{{ .request_method }}: {{ .status_code }}')` |
+| `.label_format(label, path)` | Renames, modifies or adds labels <br>Usage: `.label_format('response_size', '{{ .response_size \| lower }}')` |
 | `.labelFormat(label, path)` | Wrapper for `.label_format()` <br>Usage: `.labelFormat('response_size', '{{ .response_size \| lower }}')` |
 | `.decolorize()` | Strips ANSI sequences (color codes) from the line <br>Usage: `.decolorize()` |
 | `.drop(labels[])` | Drops one or more labels or labels with a conditional check <br>Usage: `.drop(['instance_id','host'])` |
