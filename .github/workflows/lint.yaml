@@ -36,7 +36,7 @@ jobs:
           go install github.com/google/go-jsonnet/cmd/jsonnet@latest
           go install github.com/google/go-jsonnet/cmd/jsonnet-lint@latest
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
